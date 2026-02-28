@@ -8,22 +8,23 @@ import { ArrowLeft } from 'lucide-react'
 import Link from 'next/link'
 
 type Props = {
-  recipe:     Recipe
-  categories: Category[]
-  units:      Unit[]
-  methods:    Method[]
-  timeRanges: TimeRange[]
+  recipe:         Recipe
+  categories:     Category[]
+  units:          Unit[]
+  methods:        Method[]
+  timeRanges:     TimeRange[]
+  maxIngredients: number
 }
 
-export default function EditarRecetaClient({ recipe, categories, units, methods, timeRanges }: Props) {
+export default function EditarRecetaClient({ recipe, categories, units, methods, timeRanges, maxIngredients }: Props) {
   const [pending, setPending] = useState(false)
-  const { showToast } = useToast()
+  const { showToast }         = useToast()
 
   async function handleSubmit(data: RecipeInsert) {
     setPending(true)
     showToast('Cambios guardados ✓')
     await updateRecipe(recipe.id, data)
-    }
+  }
 
   return (
     <div className="flex flex-col gap-8">
@@ -45,6 +46,7 @@ export default function EditarRecetaClient({ recipe, categories, units, methods,
         units={units}
         methods={methods}
         timeRanges={timeRanges}
+        maxIngredients={maxIngredients}
       />
     </div>
   )

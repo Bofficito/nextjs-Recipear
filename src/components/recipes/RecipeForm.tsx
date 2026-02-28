@@ -4,13 +4,14 @@ import type { Recipe, Ingredient, RecipeInsert, Category, Unit, Method, TimeRang
 import { Plus, X } from 'lucide-react'
 
 type Props = {
-  initial?:    Recipe
-  onSubmit:    (data: RecipeInsert) => Promise<void>
-  pending?:    boolean
-  categories:  Category[]
-  units:       Unit[]
-  methods:     Method[]
-  timeRanges:  TimeRange[]
+  initial?:       Recipe
+  onSubmit:       (data: RecipeInsert) => Promise<void>
+  pending?:       boolean
+  categories:     Category[]
+  units:          Unit[]
+  methods:        Method[]
+  timeRanges:     TimeRange[]
+  maxIngredients: number
 }
 
 const emptyIngredient = (): Ingredient => ({ qty: '', unit: '', name: '' })
@@ -18,6 +19,7 @@ const emptyIngredient = (): Ingredient => ({ qty: '', unit: '', name: '' })
 export default function RecipeForm({
   initial, onSubmit, pending,
   categories, units, methods, timeRanges,
+  maxIngredients,
 }: Props) {
   const [title, setTitle]       = useState(initial?.title ?? '')
   const [category, setCategory] = useState(initial?.category ?? categories[0]?.name ?? '')
@@ -38,7 +40,11 @@ export default function RecipeForm({
         idx === i ? { ...row, [field]: value } : row
       )
       const last = updated[updated.length - 1]
-      if (last.qty || last.unit || last.name) updated.push(emptyIngredient())
+      const filledCount = updated.filter(ing => ing.name.trim()).length
+      // solo agrega fila nueva si no llegó al límite
+      if ((last.qty || last.unit || last.name) && filledCount < maxIngredients) {
+        updated.push(emptyIngredient())
+      }
       return updated
     })
   }
@@ -148,11 +154,15 @@ export default function RecipeForm({
 
       {/* Ingredientes */}
       <div className="flex flex-col gap-2">
-        <label className="text-xs uppercase tracking-wider text-stone-400">Ingredientes</label>
-        <div className="grid grid-cols-[56px_100px_1fr_32px] gap-2 mb-1">
-          {['Cant.', 'Unidad', 'Ingrediente', ''].map((h, i) => (
-            <span key={i} className="text-xs text-stone-400">{h}</span>
-          ))}
+        <div className="flex items-center justify-between">
+          <label className="text-xs uppercase tracking-wider text-stone-400">Ingredientes</label>
+          <span className={`text-xs ${
+            ingredients.filter(i => i.name.trim()).length >= maxIngredients
+              ? 'text-red-400'
+              : 'text-stone-400'
+          }`}>
+            {ingredients.filter(i => i.name.trim()).length}/{maxIngredients}
+          </span>
         </div>
         {ingredients.map((ing, i) => {
           const isLast = i === ingredients.length - 1

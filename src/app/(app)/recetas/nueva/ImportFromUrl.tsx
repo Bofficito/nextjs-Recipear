@@ -48,7 +48,7 @@ export default function ImportFromUrl({ categories, units, isPro, onImport }: Pr
         <div className="border border-stone-200 rounded-xl px-4 py-4 flex items-center justify-between bg-stone-50">
           <div className="flex flex-col gap-0.5">
             <span className="text-sm text-stone-500">Importá recetas desde cualquier sitio web</span>
-            <span className="text-xs text-stone-400">Disponible en el plan Pro</span>
+            <span className="text-xs text-stone-400">Disponible en el plan de Cocina Pro</span>
           </div>
           <div className="flex items-center gap-1.5 text-xs text-stone-400 border border-stone-200 rounded-lg px-2.5 py-1.5 bg-white">
             🔒 Pro

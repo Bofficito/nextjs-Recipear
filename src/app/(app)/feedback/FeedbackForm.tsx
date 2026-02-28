@@ -29,15 +29,6 @@ export default function FeedbackForm({ userEmail }: { userEmail: string }) {
 
   return (
     <div className="flex flex-col gap-6 max-w-lg">
-      {/* Email — solo lectura */}
-      <div className="flex flex-col gap-1.5">
-        <label className="text-xs uppercase tracking-wider text-stone-400">Tu email</label>
-        <input
-          value={userEmail}
-          disabled
-          className="border border-stone-200 rounded-xl px-4 py-3 text-sm text-stone-400 bg-stone-50 cursor-not-allowed"
-        />
-      </div>
 
       {/* Tipo */}
       <div className="flex flex-col gap-2">
