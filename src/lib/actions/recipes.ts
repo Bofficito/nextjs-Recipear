@@ -58,3 +58,14 @@ export async function deleteRecipe(id: string) {
   revalidatePath('/')
   redirect('/')
 }
+
+export async function toggleFavorite(id: string, value: boolean) {
+  const supabase = await createClient()
+  const { error } = await supabase
+    .from('recipes')
+    .update({ is_favorite: value })
+    .eq('id', id)
+  if (error) throw error
+  revalidatePath('/')
+  revalidatePath(`/recetas/${id}`)
+}

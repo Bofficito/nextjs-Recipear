@@ -1,11 +1,14 @@
 import { logout } from '@/lib/actions/auth'
 import { createClient } from '@/lib/supabase/server'
-import { UtensilsCrossed, LogOut } from 'lucide-react'
+import { UtensilsCrossed, LogOut, Settings } from 'lucide-react'
 import Link from 'next/link'
+
+const ADMIN_ID = '994b20b5-87bc-4772-9f50-6d888f966b89'
 
 export default async function Header() {
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
+  const isAdmin = user?.id === ADMIN_ID
 
   return (
     <header className="border-b border-stone-200 bg-white px-4 py-4">
@@ -19,6 +22,14 @@ export default async function Header() {
           <span className="text-xs text-stone-400 hidden sm:block">
             {user?.email}
           </span>
+          {isAdmin && (
+            <Link
+              href="/backoffice"
+              className="text-stone-400 hover:text-stone-900 transition-colors"
+            >
+              <Settings size={16} />
+            </Link>
+          )}
           <form>
             <button
               formAction={logout}

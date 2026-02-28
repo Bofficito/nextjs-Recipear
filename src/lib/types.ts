@@ -5,68 +5,56 @@ import {
 } from 'lucide-react'
 
 export type Ingredient = {
-  qty: string
+  qty:  string
   unit: string
   name: string
 }
 
-export type Category =
-  | 'Desayuno' | 'Almuerzo' | 'Merienda' | 'Cena'
-  | 'Postre'   | 'Snack'    | 'Bebida'   | 'Otra'
-
 export type Recipe = {
-  id: string
-  user_id: string
-  title: string
-  category: Category
-  time: string | null
-  notes: string | null
-  steps: string | null
+  id:          string
+  user_id:     string
+  title:       string
+  category:    string
+  method:      string | null
+  time:        string | null
+  notes:       string | null
+  steps:       string | null
   ingredients: Ingredient[]
-  created_at: string
-  updated_at: string
+  is_favorite: boolean
+  created_at:  string
+  updated_at:  string
 }
 
-export type RecipeInsert = Omit<Recipe, 'id' | 'user_id' | 'created_at' | 'updated_at'>
+export type RecipeInsert = Omit<Recipe, 'id' | 'user_id' | 'is_favorite' | 'created_at' | 'updated_at'>
 
-export const CATEGORIES: Category[] = [
-  'Desayuno', 'Almuerzo', 'Merienda', 'Cena',
-  'Postre', 'Snack', 'Bebida', 'Otra'
-]
-
-export const UNITS = [
-  { label: '—',        value: '' },
-  { label: 'g',        value: 'g' },
-  { label: 'kg',       value: 'kg' },
-  { label: 'ml',       value: 'ml' },
-  { label: 'l',        value: 'l' },
-  { label: 'cda',      value: 'cda' },
-  { label: 'cdita',    value: 'cdita' },
-  { label: 'taza',     value: 'taza' },
-  { label: 'unidad',   value: 'unidad' },
-  { label: 'rebanada', value: 'rebanada' },
-  { label: 'pizca',    value: 'pizca' },
-  { label: 'al gusto', value: 'al gusto' },
-]
-
-export const CATEGORY_ICONS: Record<Category, React.ElementType> = {
-  Desayuno: Sun,
-  Almuerzo: UtensilsCrossed,
-  Merienda: Coffee,
-  Cena:     Moon,
-  Postre:   Cake,
-  Snack:    Cookie,
-  Bebida:   GlassWater,
-  Otra:     Pin,
+export type Category = {
+  id:       string
+  name:     string
+  icon:     string | null
+  position: number
 }
 
-export const CATEGORY_ICON_COMPONENTS: Record<Category, LucideIcon> = {
-  Desayuno: Sun,
-  Almuerzo: UtensilsCrossed,
-  Merienda: Coffee,
-  Cena:     Moon,
-  Postre:   Cake,
-  Snack:    Cookie,
-  Bebida:   GlassWater,
-  Otra:     Pin,
+export type Unit = {
+  id:       string
+  label:    string
+  value:    string
+  position: number
+}
+
+export type Method = {
+  id:       string
+  name:     string
+  position: number
+}
+
+export type TimeRange = {
+  id:       string
+  label:    string
+  minutes:  number
+  position: number
+}
+
+export const LUCIDE_ICONS: Record<string, LucideIcon> = {
+  Sun, UtensilsCrossed, Coffee, Moon,
+  Cake, Cookie, GlassWater, Pin,
 }

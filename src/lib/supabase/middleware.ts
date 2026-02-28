@@ -1,6 +1,8 @@
 import { createServerClient } from '@supabase/ssr'
 import { NextResponse, type NextRequest } from 'next/server'
 
+const ADMIN_ID = '994b20b5-87bc-4772-9f50-6d888f966b89'
+
 export async function updateSession(request: NextRequest) {
   let response = NextResponse.next({ request })
 
@@ -13,8 +15,7 @@ export async function updateSession(request: NextRequest) {
           return request.cookies.getAll()
         },
         setAll(cookiesToSet) {
-          // escribir en request Y en response para que los Server Components reciban el token fresco
-          cookiesToSet.forEach(({ name, value, options }) =>
+          cookiesToSet.forEach(({ name, value }) =>
             request.cookies.set(name, value)
           )
           response = NextResponse.next({ request })
@@ -26,17 +27,21 @@ export async function updateSession(request: NextRequest) {
     }
   )
 
-  // SIEMPRE getUser(), nunca getSession() en server code
   const { data: { user } } = await supabase.auth.getUser()
-
   const { pathname } = request.nextUrl
-  const isAuthRoute = pathname.startsWith('/login') || pathname.startsWith('/register')
+
+  const isAuthRoute  = pathname.startsWith('/login') || pathname.startsWith('/register')
+  const isBackoffice = pathname.startsWith('/backoffice')
 
   if (!user && !isAuthRoute) {
     return NextResponse.redirect(new URL('/login', request.url))
   }
 
   if (user && isAuthRoute) {
+    return NextResponse.redirect(new URL('/', request.url))
+  }
+
+  if (isBackoffice && user?.id !== ADMIN_ID) {
     return NextResponse.redirect(new URL('/', request.url))
   }
 
