@@ -30,7 +30,7 @@ export default function NuevaRecetaClient({ categories, units, methods, timeRang
   return (
     <div className="flex flex-col gap-8">
       <Link
-        href="/"
+        href="/recetario"
         className="flex items-center gap-1.5 text-sm text-stone-400 hover:text-stone-900 transition-colors"
       >
         <ArrowLeft size={15} />

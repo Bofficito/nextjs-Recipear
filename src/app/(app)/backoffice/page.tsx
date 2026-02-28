@@ -7,11 +7,13 @@ import {
 } from '@/lib/actions/backoffice'
 import { LUCIDE_ICONS } from '@/lib/types'
 import BackofficeSection from './BackofficeSection'
+import { getFeedback } from '@/lib/actions/feedback'
 
 export default async function BackofficePage() {
   const [categories, units, methods, timeRanges] = await Promise.all([
     getCategories(), getUnits(), getMethods(), getTimeRanges(),
   ])
+  const feedbackList = await getFeedback()
 
   return (
     <div className="flex flex-col gap-10">
@@ -87,6 +89,26 @@ export default async function BackofficePage() {
         ]}
         onCreate={createTimeRange}
       />
+      <section className="flex flex-col gap-4">
+        <h2 className="font-serif text-xl text-stone-900">Feedback</h2>
+        {feedbackList.map((f: any) => (
+          <div key={f.id} className="border border-stone-200 rounded-xl p-4 flex flex-col gap-2">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <span className="text-xs border border-stone-200 rounded-lg px-2 py-0.5 text-stone-500">
+                  {f.type}
+                </span>
+                <span className="text-xs text-stone-400">
+                  {new Date(f.created_at).toLocaleDateString('es-AR')}
+                </span>
+              </div>
+              <span className="text-xs text-stone-400">{f.user_email}</span>
+            </div>
+            <p className="text-sm text-stone-700">{f.message}</p>
+          </div>
+        ))}
+      </section>
     </div>
+    
   )
 }

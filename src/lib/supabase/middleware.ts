@@ -31,18 +31,22 @@ export async function updateSession(request: NextRequest) {
   const { pathname } = request.nextUrl
 
   const isAuthRoute  = pathname.startsWith('/login') || pathname.startsWith('/register')
+  const isPublic     = pathname === '/' || isAuthRoute
   const isBackoffice = pathname.startsWith('/backoffice')
 
-  if (!user && !isAuthRoute) {
+  // no logueado → solo puede ver rutas públicas
+  if (!user && !isPublic) {
     return NextResponse.redirect(new URL('/login', request.url))
   }
 
+  // logueado → no puede ir a login/register, lo mandamos al recetario
   if (user && isAuthRoute) {
-    return NextResponse.redirect(new URL('/', request.url))
+    return NextResponse.redirect(new URL('/recetario', request.url))
   }
 
+  // no admin → no puede ir al backoffice
   if (isBackoffice && user?.id !== ADMIN_ID) {
-    return NextResponse.redirect(new URL('/', request.url))
+    return NextResponse.redirect(new URL('/recetario', request.url))
   }
 
   return response

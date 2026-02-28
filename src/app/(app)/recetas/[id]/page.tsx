@@ -23,7 +23,7 @@ export default async function RecipePage({
     <div className="flex flex-col gap-8">
       <div className="flex items-center justify-between">
         <Link
-          href="/"
+          href="/recetario"
           className="flex items-center gap-1.5 text-sm text-stone-400 hover:text-stone-900 transition-colors"
         >
           <ArrowLeft size={15} />

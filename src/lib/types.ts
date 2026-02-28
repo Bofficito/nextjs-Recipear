@@ -23,9 +23,10 @@ export type Recipe = {
   is_favorite: boolean
   created_at:  string
   updated_at:  string
+  deleted_at:  string | null
 }
 
-export type RecipeInsert = Omit<Recipe, 'id' | 'user_id' | 'is_favorite' | 'created_at' | 'updated_at'>
+export type RecipeInsert = Omit<Recipe, 'id' | 'user_id' | 'is_favorite' | 'created_at' | 'updated_at' | 'deleted_at'>
 
 export type Category = {
   id:       string

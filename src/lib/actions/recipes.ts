@@ -9,6 +9,7 @@ export async function getRecipes() {
   const { data, error } = await supabase
     .from('recipes')
     .select('*')
+    .is('deleted_at', null)
     .order('created_at', { ascending: false })
   if (error) throw error
   return data
@@ -32,8 +33,8 @@ export async function createRecipe(recipe: RecipeInsert) {
     .from('recipes')
     .insert({ ...recipe, user_id: user!.id })
   if (error) throw error
-  revalidatePath('/')
-  redirect('/')
+  revalidatePath('/recetario')
+  redirect('/recetario')
 }
 
 export async function updateRecipe(id: string, recipe: RecipeInsert) {
@@ -43,20 +44,9 @@ export async function updateRecipe(id: string, recipe: RecipeInsert) {
     .update(recipe)
     .eq('id', id)
   if (error) throw error
-  revalidatePath('/')
+  revalidatePath('/recetario')
   revalidatePath(`/recetas/${id}`)
   redirect(`/recetas/${id}`)
-}
-
-export async function deleteRecipe(id: string) {
-  const supabase = await createClient()
-  const { error } = await supabase
-    .from('recipes')
-    .delete()
-    .eq('id', id)
-  if (error) throw error
-  revalidatePath('/')
-  redirect('/')
 }
 
 export async function toggleFavorite(id: string, value: boolean) {
@@ -66,6 +56,53 @@ export async function toggleFavorite(id: string, value: boolean) {
     .update({ is_favorite: value })
     .eq('id', id)
   if (error) throw error
-  revalidatePath('/')
+  revalidatePath('/recetario')
   revalidatePath(`/recetas/${id}`)
+}
+
+// soft delete — mueve a papelera
+export async function deleteRecipe(id: string) {
+  const supabase = await createClient()
+  const { error } = await supabase
+    .from('recipes')
+    .update({ deleted_at: new Date().toISOString() })
+    .eq('id', id)
+  if (error) throw error
+  revalidatePath('/recetario')
+  redirect('/recetario')
+}
+
+// restaurar desde papelera
+export async function restoreRecipe(id: string) {
+  const supabase = await createClient()
+  const { error } = await supabase
+    .from('recipes')
+    .update({ deleted_at: null })
+    .eq('id', id)
+  if (error) throw error
+  revalidatePath('/recetario')
+  revalidatePath('/papelera')
+}
+
+// eliminar definitivamente
+export async function permanentDeleteRecipe(id: string) {
+  const supabase = await createClient()
+  const { error } = await supabase
+    .from('recipes')
+    .delete()
+    .eq('id', id)
+  if (error) throw error
+  revalidatePath('/papelera')
+}
+
+// obtener recetas en papelera
+export async function getDeletedRecipes() {
+  const supabase = await createClient()
+  const { data, error } = await supabase
+    .from('recipes')
+    .select('*')
+    .not('deleted_at', 'is', null)
+    .order('deleted_at', { ascending: false })
+  if (error) throw error
+  return data
 }
