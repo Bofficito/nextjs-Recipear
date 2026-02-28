@@ -4,6 +4,8 @@ import RecipeList        from '@/components/recipes/RecipeList'
 import { Plus }          from 'lucide-react'
 import Link              from 'next/link'
 
+export const metadata = { title: 'Mi recetario' }
+
 export default async function HomePage() {
   const [recipes, categories] = await Promise.all([
     getRecipes(),
