@@ -1,7 +1,7 @@
-'use client'
+"use client";
 export default function ExploraButton() {
   function handleClick() {
-    document.getElementById('features')?.scrollIntoView({ behavior: 'smooth' })
+    document.getElementById("features")?.scrollIntoView({ behavior: "smooth" });
   }
 
   return (
@@ -11,5 +11,5 @@ export default function ExploraButton() {
     >
       Explorá sobre tu Recetario
     </button>
-  )
+  );
 }

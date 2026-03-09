@@ -24,9 +24,15 @@ export default function RecipeLoading() {
       <div className="flex flex-col gap-4">
         <div className="h-3 w-24 bg-stone-100 rounded animate-pulse" />
         {[...Array(5)].map((_, i) => (
-          <div key={i} className="flex items-center gap-3 py-3 border-b border-stone-100">
+          <div
+            key={i}
+            className="flex items-center gap-3 py-3 border-b border-stone-100"
+          >
             <div className="w-1.5 h-1.5 rounded-full bg-stone-200 flex-shrink-0" />
-            <div className="h-4 bg-stone-100 rounded animate-pulse" style={{ width: `${40 + Math.random() * 40}%` }} />
+            <div
+              className="h-4 bg-stone-100 rounded animate-pulse"
+              style={{ width: `${40 + Math.random() * 40}%` }}
+            />
           </div>
         ))}
       </div>
@@ -36,10 +42,14 @@ export default function RecipeLoading() {
         <div className="h-3 w-24 bg-stone-100 rounded animate-pulse" />
         <div className="flex flex-col gap-2">
           {[...Array(4)].map((_, i) => (
-            <div key={i} className="h-4 bg-stone-100 rounded animate-pulse" style={{ width: `${60 + Math.random() * 35}%` }} />
+            <div
+              key={i}
+              className="h-4 bg-stone-100 rounded animate-pulse"
+              style={{ width: `${60 + Math.random() * 35}%` }}
+            />
           ))}
         </div>
       </div>
     </div>
-  )
+  );
 }

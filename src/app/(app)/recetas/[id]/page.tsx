@@ -1,28 +1,28 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getRecipe } from "@/lib/actions/recipes";
-import { getRecipeTags } from '@/lib/actions/tags'
+import { getRecipeTags } from "@/lib/actions/tags";
 import { Clock, ArrowLeft, Pencil, ChefHat } from "lucide-react";
 import PortionScaler from "./PortionScaler";
 import CookingModeButton from "./CookingModeButton";
 import FavoriteButton from "./FavoriteButton";
-import ShareButton from './ShareButton'
+import ShareButton from "./ShareButton";
 import DeleteButton from "./DeleteButton";
-import DownloadPDFButton from './DownloadPDFButton'
+import DownloadPDFButton from "./DownloadPDFButton";
 
-import type { Ingredient, Tag } from '@/lib/types'
+import type { Ingredient, Tag } from "@/lib/types";
 
 export default async function RecipePage({
   params,
 }: {
   params: Promise<{ id: string }>;
 }) {
-  const { id } = await params
+  const { id } = await params;
   const [recipe, tags] = await Promise.all([
     getRecipe(id).catch(() => null),
     getRecipeTags(id),
-  ])
-  if (!recipe) notFound()
+  ]);
+  if (!recipe) notFound();
 
   const ingredients = recipe.ingredients as Ingredient[];
 
@@ -97,7 +97,7 @@ export default async function RecipePage({
               <span
                 key={tag.id}
                 className="text-xs px-2.5 py-1 rounded-lg font-medium"
-                style={{ backgroundColor: tag.color + '22', color: tag.color }}
+                style={{ backgroundColor: tag.color + "22", color: tag.color }}
               >
                 {tag.name}
               </span>

@@ -1,14 +1,26 @@
-import { UtensilsCrossed, LogOut, Settings, Trash2, MessageSquare, Sparkles, Tag, BookOpen } from 'lucide-react'
-import Link from 'next/link'
-import { logout } from '@/lib/actions/auth'
-import { createClient } from '@/lib/supabase/server'
-import MobileMenu from './MobileMenu'
+import {
+  UtensilsCrossed,
+  LogOut,
+  Settings,
+  Trash2,
+  MessageSquare,
+  Sparkles,
+  Tag,
+  BookOpen,
+} from "lucide-react";
+import Link from "next/link";
+import { logout } from "@/lib/actions/auth";
+import { createClient } from "@/lib/supabase/server";
+import MobileMenu from "./MobileMenu";
 
-const ADMIN_ID = '994b20b5-87bc-4772-9f50-6d888f966b89'
+const ADMIN_ID = "994b20b5-87bc-4772-9f50-6d888f966b89";
 
-function Tooltip({ label, children }: {
-  label: string
-  children: React.ReactNode
+function Tooltip({
+  label,
+  children,
+}: {
+  label: string;
+  children: React.ReactNode;
 }) {
   return (
     <div className="relative group">
@@ -18,22 +30,24 @@ function Tooltip({ label, children }: {
         {label}
       </div>
     </div>
-  )
+  );
 }
 
 export default async function Header() {
-  const supabase = await createClient()
-  const { data: { user } } = await supabase.auth.getUser()
-  const isAdmin = user?.id === ADMIN_ID
+  const supabase = await createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+  const isAdmin = user?.id === ADMIN_ID;
 
   const { data: profile } = await supabase
-    .from('profiles')
-    .select('plan')
-    .eq('id', user!.id)
-    .single()
+    .from("profiles")
+    .select("plan")
+    .eq("id", user!.id)
+    .single();
 
-  const plan = profile?.plan ?? 'free'
-  const isPro = plan !== 'free'
+  const plan = profile?.plan ?? "free";
+  const isPro = plan !== "free";
 
   return (
     <header className="border-b border-stone-200 bg-white px-4 py-4">
@@ -49,53 +63,71 @@ export default async function Header() {
         {/* Desktop */}
         <div className="hidden md:flex items-center gap-4">
           <div className="flex items-center gap-2">
-            <span className="text-xs text-stone-400">
-              {user?.email}
-            </span>
+            <span className="text-xs text-stone-400">{user?.email}</span>
             {isPro && (
-              <span className={`text-xs font-medium px-2 py-0.5 rounded-md ${
-                plan === 'lifetime'
-                  ? 'bg-amber-100 text-amber-700'
-                  : 'bg-stone-100 text-stone-600'
-              }`}>
-                {plan === 'lifetime' ? '✦ Lifetime' : '★ Pro'}
+              <span
+                className={`text-xs font-medium px-2 py-0.5 rounded-md ${
+                  plan === "lifetime"
+                    ? "bg-amber-100 text-amber-700"
+                    : "bg-stone-100 text-stone-600"
+                }`}
+              >
+                {plan === "lifetime" ? "✦ Lifetime" : "★ Pro"}
               </span>
             )}
           </div>
 
           <Tooltip label="Etiquetas">
-            <Link href="/etiquetas" className="text-stone-400 hover:text-stone-900 transition-colors">
+            <Link
+              href="/etiquetas"
+              className="text-stone-400 hover:text-stone-900 transition-colors"
+            >
               <Tag size={16} />
             </Link>
           </Tooltip>
 
           <Tooltip label="Exportar recetario">
-            <Link href="/exportar" className="text-stone-400 hover:text-stone-900 transition-colors">
+            <Link
+              href="/exportar"
+              className="text-stone-400 hover:text-stone-900 transition-colors"
+            >
               <BookOpen size={16} />
             </Link>
           </Tooltip>
 
           <Tooltip label="Planes">
-            <Link href="/planes" className="text-stone-400 hover:text-stone-900 transition-colors">
+            <Link
+              href="/planes"
+              className="text-stone-400 hover:text-stone-900 transition-colors"
+            >
               <Sparkles size={16} />
             </Link>
           </Tooltip>
 
           <Tooltip label="Feedback">
-            <Link href="/feedback" className="text-stone-400 hover:text-stone-900 transition-colors">
+            <Link
+              href="/feedback"
+              className="text-stone-400 hover:text-stone-900 transition-colors"
+            >
               <MessageSquare size={16} />
             </Link>
           </Tooltip>
 
           <Tooltip label="Papelera">
-            <Link href="/papelera" className="text-stone-400 hover:text-stone-900 transition-colors">
+            <Link
+              href="/papelera"
+              className="text-stone-400 hover:text-stone-900 transition-colors"
+            >
               <Trash2 size={16} />
             </Link>
           </Tooltip>
 
           {isAdmin && (
             <Tooltip label="Backoffice">
-              <Link href="/backoffice" className="text-stone-400 hover:text-stone-900 transition-colors">
+              <Link
+                href="/backoffice"
+                className="text-stone-400 hover:text-stone-900 transition-colors"
+              >
                 <Settings size={16} />
               </Link>
             </Tooltip>
@@ -116,10 +148,10 @@ export default async function Header() {
         {/* Mobile */}
         <MobileMenu
           isAdmin={isAdmin}
-          userEmail={user?.email ?? ''}
+          userEmail={user?.email ?? ""}
           plan={plan}
         />
       </div>
     </header>
-  )
+  );
 }

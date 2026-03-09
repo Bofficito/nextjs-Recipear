@@ -1,6 +1,6 @@
-import RegisterForm from './RegisterForm'
+import RegisterForm from "./RegisterForm";
 
-export const metadata = { title: 'Crear cuenta' }
+export const metadata = { title: "Crear cuenta" };
 
 export default function RegisterPage() {
   return (
@@ -11,5 +11,5 @@ export default function RegisterPage() {
       <p className="text-sm text-stone-400 mb-8">creá tu cuenta</p>
       <RegisterForm />
     </div>
-  )
+  );
 }

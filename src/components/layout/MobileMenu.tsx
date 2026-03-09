@@ -1,6 +1,17 @@
 "use client";
 import { useState } from "react";
-import { Menu, X, UtensilsCrossed, Sparkles, MessageSquare, Trash2, Settings, LogOut, Tag, BookOpen } from "lucide-react";
+import {
+  Menu,
+  X,
+  UtensilsCrossed,
+  Sparkles,
+  MessageSquare,
+  Trash2,
+  Settings,
+  LogOut,
+  Tag,
+  BookOpen,
+} from "lucide-react";
 import Link from "next/link";
 import { logout } from "@/lib/actions/auth";
 
@@ -12,7 +23,7 @@ type Props = {
 
 const MENU_ITEMS = (isAdmin: boolean) => [
   { href: "/recetario", icon: UtensilsCrossed, label: "Mi recetario" },
-  { href: '/exportar', icon: BookOpen, label: 'Exportar recetario' },
+  { href: "/exportar", icon: BookOpen, label: "Exportar recetario" },
   { href: "/etiquetas", icon: Tag, label: "Etiquetas" },
   { href: "/papelera", icon: Trash2, label: "Papelera" },
   { href: "/planes", icon: Sparkles, label: "Planes" },

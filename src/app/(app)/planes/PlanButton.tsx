@@ -1,23 +1,23 @@
-'use client'
-import { useState } from 'react'
-import { createPaymentPreference } from '@/lib/actions/payments'
+"use client";
+import { useState } from "react";
+import { createPaymentPreference } from "@/lib/actions/payments";
 
 type Props = {
-  planId:    'monthly' | 'yearly' | 'lifetime'
-  label:     string
-  isDark:    boolean
-}
+  planId: "monthly" | "yearly" | "lifetime";
+  label: string;
+  isDark: boolean;
+};
 
 export default function PlanButton({ planId, label, isDark }: Props) {
-  const [loading, setLoading] = useState(false)
+  const [loading, setLoading] = useState(false);
 
   async function handleClick() {
-    setLoading(true)
+    setLoading(true);
     try {
-      const url = await createPaymentPreference(planId)
-      window.location.href = url
+      const url = await createPaymentPreference(planId);
+      window.location.href = url;
     } catch {
-      setLoading(false)
+      setLoading(false);
     }
   }
 
@@ -27,11 +27,11 @@ export default function PlanButton({ planId, label, isDark }: Props) {
       disabled={loading}
       className={`w-full py-3 rounded-xl text-sm font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed ${
         isDark
-          ? 'bg-white text-stone-900 hover:bg-stone-100'
-          : 'bg-stone-900 text-white hover:bg-stone-700'
+          ? "bg-white text-stone-900 hover:bg-stone-100"
+          : "bg-stone-900 text-white hover:bg-stone-700"
       }`}
     >
-      {loading ? 'Redirigiendo...' : label}
+      {loading ? "Redirigiendo..." : label}
     </button>
-  )
+  );
 }

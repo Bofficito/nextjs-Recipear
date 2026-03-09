@@ -1,10 +1,10 @@
-import { getDeletedRecipes } from '@/lib/actions/recipes'
-import TrashList from './TrashList'
-import { ArrowLeft } from 'lucide-react'
-import Link from 'next/link'
+import { getDeletedRecipes } from "@/lib/actions/recipes";
+import TrashList from "./TrashList";
+import { ArrowLeft } from "lucide-react";
+import Link from "next/link";
 
 export default async function PapeleraPage() {
-  const recipes = await getDeletedRecipes()
+  const recipes = await getDeletedRecipes();
 
   return (
     <div className="flex flex-col gap-8">
@@ -24,12 +24,16 @@ export default async function PapeleraPage() {
 
       {recipes.length === 0 ? (
         <div className="text-center py-16">
-          <p className="font-serif text-xl text-stone-900 mb-2">La papelera está vacía</p>
-          <p className="text-sm text-stone-400">Las recetas eliminadas aparecerán acá</p>
+          <p className="font-serif text-xl text-stone-900 mb-2">
+            La papelera está vacía
+          </p>
+          <p className="text-sm text-stone-400">
+            Las recetas eliminadas aparecerán acá
+          </p>
         </div>
       ) : (
         <TrashList recipes={recipes as any} />
       )}
     </div>
-  )
+  );
 }

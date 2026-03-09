@@ -1,11 +1,13 @@
-import { createClient } from '@/lib/supabase/server'
-import FeedbackForm from './FeedbackForm'
-import { ArrowLeft } from 'lucide-react'
-import Link from 'next/link'
+import { createClient } from "@/lib/supabase/server";
+import FeedbackForm from "./FeedbackForm";
+import { ArrowLeft } from "lucide-react";
+import Link from "next/link";
 
 export default async function FeedbackPage() {
-  const supabase = await createClient()
-  const { data: { user } } = await supabase.auth.getUser()
+  const supabase = await createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
 
   return (
     <div className="flex flex-col gap-8">
@@ -23,7 +25,7 @@ export default async function FeedbackPage() {
         </p>
       </div>
 
-      <FeedbackForm userEmail={user?.email ?? ''} />
+      <FeedbackForm userEmail={user?.email ?? ""} />
     </div>
-  )
+  );
 }

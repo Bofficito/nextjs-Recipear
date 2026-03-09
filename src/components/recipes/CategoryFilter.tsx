@@ -1,20 +1,24 @@
-'use client'
-import { useRouter, useSearchParams } from 'next/navigation'
-import type { Category } from '@/lib/types'
+"use client";
+import { useRouter, useSearchParams } from "next/navigation";
+import type { Category } from "@/lib/types";
 
-export default function CategoryFilter({ categories = [] }: { categories: Category[] }) {
-  const router = useRouter()
-  const searchParams = useSearchParams()
-  const active = searchParams.get('cat') ?? ''
+export default function CategoryFilter({
+  categories = [],
+}: {
+  categories: Category[];
+}) {
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const active = searchParams.get("cat") ?? "";
 
   function handleChange(e: React.ChangeEvent<HTMLSelectElement>) {
-    const params = new URLSearchParams(searchParams.toString())
-    if (e.target.value === '') {
-      params.delete('cat')
+    const params = new URLSearchParams(searchParams.toString());
+    if (e.target.value === "") {
+      params.delete("cat");
     } else {
-      params.set('cat', e.target.value)
+      params.set("cat", e.target.value);
     }
-    router.push(`/?${params.toString()}`)
+    router.push(`/?${params.toString()}`);
   }
 
   return (
@@ -30,5 +34,5 @@ export default function CategoryFilter({ categories = [] }: { categories: Catego
         </option>
       ))}
     </select>
-  )
+  );
 }

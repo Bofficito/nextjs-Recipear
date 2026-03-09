@@ -19,7 +19,10 @@ export default function HomeLoading() {
       {/* Cards */}
       <div className="flex flex-col gap-3">
         {[...Array(4)].map((_, i) => (
-          <div key={i} className="bg-white border border-stone-200 rounded-2xl p-5 flex flex-col gap-3">
+          <div
+            key={i}
+            className="bg-white border border-stone-200 rounded-2xl p-5 flex flex-col gap-3"
+          >
             <div className="h-3 w-20 bg-stone-100 rounded animate-pulse" />
             <div className="h-6 w-48 bg-stone-200 rounded animate-pulse" />
             <div className="flex gap-4">
@@ -30,5 +33,5 @@ export default function HomeLoading() {
         ))}
       </div>
     </div>
-  )
+  );
 }

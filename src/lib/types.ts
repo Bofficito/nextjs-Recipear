@@ -80,7 +80,13 @@ export type Tag = {
 
 export type RecipeInsert = Omit<
   Recipe,
-  "id" | "user_id" | "is_favorite" | "created_at" | "updated_at" | "deleted_at"
+  | "id"
+  | "user_id"
+  | "is_favorite"
+  | "is_public"
+  | "created_at"
+  | "updated_at"
+  | "deleted_at"
 >;
 
 export type RecipeListItem = Pick<

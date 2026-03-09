@@ -1,47 +1,48 @@
-'use client'
-import { useState, useTransition } from 'react'
-import { submitFeedback } from '@/lib/actions/feedback'
-import { useToast } from '@/components/ui/ToastProvider'
-import { useRouter } from 'next/navigation'
-import { Send } from 'lucide-react'
+"use client";
+import { useState, useTransition } from "react";
+import { submitFeedback } from "@/lib/actions/feedback";
+import { useToast } from "@/components/ui/ToastProvider";
+import { useRouter } from "next/navigation";
+import { Send } from "lucide-react";
 
 const TYPES = [
-  { value: 'bug',        label: '🐛 Bug' },
-  { value: 'sugerencia', label: '💡 Sugerencia' },
-  { value: 'otro',       label: '💬 Otro' },
-]
+  { value: "bug", label: "🐛 Bug" },
+  { value: "sugerencia", label: "💡 Sugerencia" },
+  { value: "otro", label: "💬 Otro" },
+];
 
 export default function FeedbackForm({ userEmail }: { userEmail: string }) {
-  const [type, setType]       = useState('sugerencia')
-  const [message, setMessage] = useState('')
-  const [, startTransition]   = useTransition()
-  const { showToast }         = useToast()
-  const router                = useRouter()
+  const [type, setType] = useState("sugerencia");
+  const [message, setMessage] = useState("");
+  const [, startTransition] = useTransition();
+  const { showToast } = useToast();
+  const router = useRouter();
 
   function handleSubmit() {
-    if (!message.trim()) return
+    if (!message.trim()) return;
     startTransition(async () => {
-      await submitFeedback(type, message)
-      showToast('Feedback enviado, ¡gracias! 🙌')
-      router.push('/recetario')
-    })
+      await submitFeedback(type, message);
+      showToast("Feedback enviado, ¡gracias! 🙌");
+      router.push("/recetario");
+    });
   }
 
   return (
     <div className="flex flex-col gap-6 max-w-lg">
-
       {/* Tipo */}
       <div className="flex flex-col gap-2">
-        <label className="text-xs uppercase tracking-wider text-stone-400">Tipo</label>
+        <label className="text-xs uppercase tracking-wider text-stone-400">
+          Tipo
+        </label>
         <div className="flex gap-2">
-          {TYPES.map(t => (
+          {TYPES.map((t) => (
             <button
               key={t.value}
               onClick={() => setType(t.value)}
               className={`flex-1 text-sm py-2.5 rounded-xl border transition-colors ${
                 type === t.value
-                  ? 'border-stone-900 bg-stone-900 text-white'
-                  : 'border-stone-200 text-stone-600 hover:border-stone-400'
+                  ? "border-stone-900 bg-stone-900 text-white"
+                  : "border-stone-200 text-stone-600 hover:border-stone-400"
               }`}
             >
               {t.label}
@@ -52,10 +53,12 @@ export default function FeedbackForm({ userEmail }: { userEmail: string }) {
 
       {/* Mensaje */}
       <div className="flex flex-col gap-2">
-        <label className="text-xs uppercase tracking-wider text-stone-400">Mensaje</label>
+        <label className="text-xs uppercase tracking-wider text-stone-400">
+          Mensaje
+        </label>
         <textarea
           value={message}
-          onChange={e => setMessage(e.target.value)}
+          onChange={(e) => setMessage(e.target.value)}
           placeholder="Contanos qué pensás..."
           rows={5}
           className="border border-stone-200 rounded-xl px-4 py-3 text-sm text-stone-900 bg-white outline-none focus:border-stone-400 transition-colors resize-none"
@@ -71,5 +74,5 @@ export default function FeedbackForm({ userEmail }: { userEmail: string }) {
         Enviar
       </button>
     </div>
-  )
+  );
 }

@@ -1,10 +1,10 @@
-'use client'
-import { deleteRecipe } from '@/lib/actions/recipes'
-import { Trash2 } from 'lucide-react'
-import { useState } from 'react'
+"use client";
+import { deleteRecipe } from "@/lib/actions/recipes";
+import { Trash2 } from "lucide-react";
+import { useState } from "react";
 
 export default function DeleteButton({ id }: { id: string }) {
-  const [confirm, setConfirm] = useState(false)
+  const [confirm, setConfirm] = useState(false);
 
   if (confirm) {
     return (
@@ -23,7 +23,7 @@ export default function DeleteButton({ id }: { id: string }) {
           Cancelar
         </button>
       </div>
-    )
+    );
   }
 
   return (
@@ -34,5 +34,5 @@ export default function DeleteButton({ id }: { id: string }) {
       <Trash2 size={13} />
       Eliminar
     </button>
-  )
+  );
 }

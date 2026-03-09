@@ -1,5 +1,5 @@
-import { Clock } from 'lucide-react'
-import Link from 'next/link'
+import { Clock } from "lucide-react";
+import Link from "next/link";
 
 export default function PagoPendientePage() {
   return (
@@ -8,7 +8,9 @@ export default function PagoPendientePage() {
         <Clock size={28} className="text-amber-600" />
       </div>
       <div>
-        <h1 className="font-serif text-3xl text-stone-900 mb-2">Pago pendiente</h1>
+        <h1 className="font-serif text-3xl text-stone-900 mb-2">
+          Pago pendiente
+        </h1>
         <p className="text-stone-400 text-sm max-w-sm">
           Tu pago está siendo procesado. Te avisaremos cuando se confirme.
         </p>
@@ -20,5 +22,5 @@ export default function PagoPendientePage() {
         Volver al recetario
       </Link>
     </div>
-  )
+  );
 }

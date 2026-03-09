@@ -1,10 +1,10 @@
-'use client'
-import { useActionState } from 'react'
-import { register } from '@/lib/actions/auth'
-import Link from 'next/link'
+"use client";
+import { useActionState } from "react";
+import { register } from "@/lib/actions/auth";
+import Link from "next/link";
 
 export default function RegisterForm() {
-  const [state, formAction, pending] = useActionState(register, null)
+  const [state, formAction, pending] = useActionState(register, null);
 
   // Si hay mensaje de éxito, mostrar pantalla de confirmación
   if (state?.message) {
@@ -15,7 +15,8 @@ export default function RegisterForm() {
           Revisá tu email
         </h2>
         <p className="text-sm text-stone-400">
-          Te enviamos un link de confirmación a tu casilla. Una vez que confirmés, podés iniciar sesión.
+          Te enviamos un link de confirmación a tu casilla. Una vez que
+          confirmés, podés iniciar sesión.
         </p>
         <Link
           href="/login"
@@ -24,7 +25,7 @@ export default function RegisterForm() {
           Ir al login
         </Link>
       </div>
-    )
+    );
   }
 
   return (
@@ -36,7 +37,9 @@ export default function RegisterForm() {
       )}
 
       <div className="flex flex-col gap-1.5">
-        <label className="text-xs uppercase tracking-wider text-stone-400">Email</label>
+        <label className="text-xs uppercase tracking-wider text-stone-400">
+          Email
+        </label>
         <input
           name="email"
           type="email"
@@ -47,7 +50,9 @@ export default function RegisterForm() {
       </div>
 
       <div className="flex flex-col gap-1.5">
-        <label className="text-xs uppercase tracking-wider text-stone-400">Contraseña</label>
+        <label className="text-xs uppercase tracking-wider text-stone-400">
+          Contraseña
+        </label>
         <input
           name="password"
           type="password"
@@ -63,15 +68,18 @@ export default function RegisterForm() {
         disabled={pending}
         className="bg-stone-900 text-white rounded-xl py-3 text-sm mt-2 hover:bg-stone-700 transition-colors disabled:opacity-50"
       >
-        {pending ? 'Creando cuenta...' : 'Crear cuenta'}
+        {pending ? "Creando cuenta..." : "Crear cuenta"}
       </button>
 
       <p className="text-sm text-stone-400 text-center mt-2">
-        ¿Ya tenés cuenta?{' '}
-        <Link href="/login" className="text-stone-900 underline underline-offset-2">
+        ¿Ya tenés cuenta?{" "}
+        <Link
+          href="/login"
+          className="text-stone-900 underline underline-offset-2"
+        >
           Iniciá sesión
         </Link>
       </p>
     </form>
-  )
+  );
 }

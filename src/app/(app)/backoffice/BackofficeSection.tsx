@@ -1,36 +1,45 @@
-'use client'
-import { useState } from 'react'
-import { Trash2, Plus, ChevronDown, ChevronUp } from 'lucide-react'
+"use client";
+import { useState } from "react";
+import { Trash2, Plus, ChevronDown, ChevronUp } from "lucide-react";
 
-type Item = { id: string; label: string; sublabel?: string }
-type Field = { name: string; label: string; placeholder?: string; type?: string }
+type Item = { id: string; label: string; sublabel?: string };
+type Field = {
+  name: string;
+  label: string;
+  placeholder?: string;
+  type?: string;
+};
 
 type Props = {
-  title:    string
-  items:    Item[]
-  fields:   Field[]
-  onCreate: (formData: FormData) => Promise<void>
-  onDelete: (id: string) => Promise<void>
-}
+  title: string;
+  items: Item[];
+  fields: Field[];
+  onCreate: (formData: FormData) => Promise<void>;
+  onDelete: (id: string) => Promise<void>;
+};
 
 export default function BackofficeSection({
-  title, items, fields, onCreate, onDelete,
+  title,
+  items,
+  fields,
+  onCreate,
+  onDelete,
 }: Props) {
-  const [open, setOpen]       = useState(false)
-  const [adding, setAdding]   = useState(false)
-  const [deleting, setDeleting] = useState<string | null>(null)
+  const [open, setOpen] = useState(false);
+  const [adding, setAdding] = useState(false);
+  const [deleting, setDeleting] = useState<string | null>(null);
 
   async function handleDelete(id: string) {
-    setDeleting(id)
-    await onDelete(id)
-    setDeleting(null)
+    setDeleting(id);
+    await onDelete(id);
+    setDeleting(null);
   }
 
   return (
     <section className="border border-stone-200 rounded-2xl overflow-hidden">
       {/* Header */}
       <button
-        onClick={() => setOpen(o => !o)}
+        onClick={() => setOpen((o) => !o)}
         className="w-full flex items-center justify-between px-6 py-4 bg-white hover:bg-stone-50 transition-colors"
       >
         <div className="flex items-center gap-3">
@@ -39,19 +48,28 @@ export default function BackofficeSection({
             {items.length}
           </span>
         </div>
-        {open ? <ChevronUp size={16} className="text-stone-400" /> : <ChevronDown size={16} className="text-stone-400" />}
+        {open ? (
+          <ChevronUp size={16} className="text-stone-400" />
+        ) : (
+          <ChevronDown size={16} className="text-stone-400" />
+        )}
       </button>
 
       {open && (
         <div className="border-t border-stone-100">
           {/* Lista */}
           <ul className="divide-y divide-stone-100">
-            {items.map(item => (
-              <li key={item.id} className="flex items-center justify-between px-6 py-3 bg-white">
+            {items.map((item) => (
+              <li
+                key={item.id}
+                className="flex items-center justify-between px-6 py-3 bg-white"
+              >
                 <div>
                   <span className="text-sm text-stone-900">{item.label}</span>
                   {item.sublabel && (
-                    <span className="text-xs text-stone-400 ml-2">{item.sublabel}</span>
+                    <span className="text-xs text-stone-400 ml-2">
+                      {item.sublabel}
+                    </span>
                   )}
                 </div>
                 <button
@@ -83,20 +101,24 @@ export default function BackofficeSection({
             ) : (
               <form
                 action={async (formData) => {
-                  await onCreate(formData)
-                  setAdding(false)
+                  await onCreate(formData);
+                  setAdding(false);
                 }}
                 className="flex flex-col gap-3"
               >
                 <div className="grid grid-cols-2 gap-3">
-                  {fields.map(field => (
+                  {fields.map((field) => (
                     <div key={field.name} className="flex flex-col gap-1">
-                      <label className="text-xs text-stone-400">{field.label}</label>
+                      <label className="text-xs text-stone-400">
+                        {field.label}
+                      </label>
                       <input
                         name={field.name}
-                        type={field.type ?? 'text'}
+                        type={field.type ?? "text"}
                         placeholder={field.placeholder}
-                        required={field.name !== 'position' && field.name !== 'icon'}
+                        required={
+                          field.name !== "position" && field.name !== "icon"
+                        }
                         className="border border-stone-200 rounded-lg px-3 py-2 text-sm bg-white outline-none focus:border-stone-400 transition-colors"
                       />
                     </div>
@@ -123,5 +145,5 @@ export default function BackofficeSection({
         </div>
       )}
     </section>
-  )
+  );
 }

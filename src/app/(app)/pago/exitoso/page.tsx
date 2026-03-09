@@ -1,10 +1,10 @@
-import { Check } from 'lucide-react'
-import Link from 'next/link'
+import { Check } from "lucide-react";
+import Link from "next/link";
 
 export default function PagoExitosoPage({
   searchParams,
 }: {
-  searchParams: Promise<{ plan?: string }>
+  searchParams: Promise<{ plan?: string }>;
 }) {
   return (
     <div className="flex flex-col items-center justify-center py-20 gap-6 text-center">
@@ -12,9 +12,12 @@ export default function PagoExitosoPage({
         <Check size={28} className="text-green-600" />
       </div>
       <div>
-        <h1 className="font-serif text-3xl text-stone-900 mb-2">¡Pago exitoso!</h1>
+        <h1 className="font-serif text-3xl text-stone-900 mb-2">
+          ¡Pago exitoso!
+        </h1>
         <p className="text-stone-400 text-sm max-w-sm">
-          Tu plan fue activado. Ya podés disfrutar de todas las features de Recipear Pro.
+          Tu plan fue activado. Ya podés disfrutar de todas las features de
+          Recipear Pro.
         </p>
       </div>
       <Link
@@ -24,5 +27,5 @@ export default function PagoExitosoPage({
         Ir a mi recetario
       </Link>
     </div>
-  )
+  );
 }

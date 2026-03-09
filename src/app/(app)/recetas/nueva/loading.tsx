@@ -14,5 +14,5 @@ export default function NuevaRecetaLoading() {
         <div className="h-12 bg-stone-200 rounded-xl animate-pulse" />
       </div>
     </div>
-  )
+  );
 }

@@ -1,17 +1,21 @@
-'use client'
-import { useState } from 'react'
-import { ChefHat } from 'lucide-react'
-import CookingMode from './CookingMode'
-import type { Ingredient } from '@/lib/types'
+"use client";
+import { useState } from "react";
+import { ChefHat } from "lucide-react";
+import CookingMode from "./CookingMode";
+import type { Ingredient } from "@/lib/types";
 
 type Props = {
-  title:       string
-  steps:       string
-  ingredients: Ingredient[]
-}
+  title: string;
+  steps: string;
+  ingredients: Ingredient[];
+};
 
-export default function CookingModeButton({ title, steps, ingredients }: Props) {
-  const [active, setActive] = useState(false)
+export default function CookingModeButton({
+  title,
+  steps,
+  ingredients,
+}: Props) {
+  const [active, setActive] = useState(false);
 
   return (
     <>
@@ -32,5 +36,5 @@ export default function CookingModeButton({ title, steps, ingredients }: Props) 
         />
       )}
     </>
-  )
+  );
 }

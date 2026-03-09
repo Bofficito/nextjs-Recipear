@@ -1,10 +1,10 @@
-'use client'
-import { useActionState } from 'react'
-import { login } from '@/lib/actions/auth'
-import Link from 'next/link'
+"use client";
+import { useActionState } from "react";
+import { login } from "@/lib/actions/auth";
+import Link from "next/link";
 
 export default function LoginForm() {
-  const [state, formAction, pending] = useActionState(login, null)
+  const [state, formAction, pending] = useActionState(login, null);
 
   return (
     <form action={formAction} className="flex flex-col gap-4">
@@ -45,15 +45,18 @@ export default function LoginForm() {
         disabled={pending}
         className="bg-stone-900 text-white rounded-xl py-3 text-sm mt-2 hover:bg-stone-700 transition-colors disabled:opacity-50"
       >
-        {pending ? 'Entrando...' : 'Entrar'}
+        {pending ? "Entrando..." : "Entrar"}
       </button>
 
       <p className="text-sm text-stone-400 text-center mt-2">
-        ¿No tenés cuenta?{' '}
-        <Link href="/register" className="text-stone-900 underline underline-offset-2">
+        ¿No tenés cuenta?{" "}
+        <Link
+          href="/register"
+          className="text-stone-900 underline underline-offset-2"
+        >
           Registrate
         </Link>
       </p>
     </form>
-  )
+  );
 }
