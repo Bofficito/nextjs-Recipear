@@ -1,23 +1,28 @@
-import { getRecipe }       from '@/lib/actions/recipes'
-import type { Ingredient } from '@/lib/types'
-import { Clock, ArrowLeft, Pencil, ChefHat } from 'lucide-react'
-import Link                from 'next/link'
-import DeleteButton        from './DeleteButton'
-import CookingModeButton   from './CookingModeButton'
-import PortionScaler       from './PortionScaler'
-import { notFound }        from 'next/navigation'
-import FavoriteButton from './FavoriteButton'
+import Link from "next/link";
+import { getRecipe } from "@/lib/actions/recipes";
+import { getRecipeTags } from '@/lib/actions/tags'
+import { Clock, ArrowLeft, Pencil, ChefHat } from "lucide-react";
+import DeleteButton from "./DeleteButton";
+import CookingModeButton from "./CookingModeButton";
+import PortionScaler from "./PortionScaler";
+import { notFound } from "next/navigation";
+import FavoriteButton from "./FavoriteButton";
+
+import type { Ingredient, Tag } from '@/lib/types'
 
 export default async function RecipePage({
   params,
 }: {
-  params: Promise<{ id: string }>
+  params: Promise<{ id: string }>;
 }) {
   const { id } = await params
-  const recipe = await getRecipe(id).catch(() => null)
+  const [recipe, tags] = await Promise.all([
+    getRecipe(id).catch(() => null),
+    getRecipeTags(id),
+  ])
   if (!recipe) notFound()
 
-  const ingredients = recipe.ingredients as Ingredient[]
+  const ingredients = recipe.ingredients as Ingredient[];
 
   return (
     <div className="flex flex-col gap-8">
@@ -82,6 +87,20 @@ export default async function RecipePage({
           {recipe.title}
         </h1>
 
+        {tags.length > 0 && (
+          <div className="flex flex-wrap gap-2 mt-3">
+            {tags.map((tag: Tag) => (
+              <span
+                key={tag.id}
+                className="text-xs px-2.5 py-1 rounded-lg font-medium"
+                style={{ backgroundColor: tag.color + '22', color: tag.color }}
+              >
+                {tag.name}
+              </span>
+            ))}
+          </div>
+        )}
+
         {recipe.notes && (
           <div className="mt-4 bg-stone-100 rounded-xl px-4 py-3">
             <p className="text-sm text-stone-500 italic">{recipe.notes}</p>
@@ -89,9 +108,7 @@ export default async function RecipePage({
         )}
       </div>
 
-      {ingredients.length > 0 && (
-        <PortionScaler ingredients={ingredients} />
-      )}
+      {ingredients.length > 0 && <PortionScaler ingredients={ingredients} />}
 
       {recipe.condiments && recipe.condiments.length > 0 && (
         <section>
@@ -122,5 +139,5 @@ export default async function RecipePage({
         </section>
       )}
     </div>
-  )
+  );
 }

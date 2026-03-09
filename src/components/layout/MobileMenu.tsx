@@ -1,26 +1,29 @@
-'use client'
-import { useState } from 'react'
-import { Menu, X, UtensilsCrossed, Sparkles, MessageSquare, Trash2, Settings, LogOut, Tag } from 'lucide-react'
-import Link from 'next/link'
-import { logout } from '@/lib/actions/auth'
+"use client";
+import { useState } from "react";
+import { Menu, X, UtensilsCrossed, Sparkles, MessageSquare, Trash2, Settings, LogOut, Tag,
+} from "lucide-react";
+import Link from "next/link";
+import { logout } from "@/lib/actions/auth";
 
 type Props = {
-  isAdmin: boolean
-  userEmail: string
-  plan: string
-}
+  isAdmin: boolean;
+  userEmail: string;
+  plan: string;
+};
 
 const MENU_ITEMS = (isAdmin: boolean) => [
-  { href: '/recetario',  icon: UtensilsCrossed, label: 'Mi recetario' },
-  { href: '/etiquetas', icon: Tag, label: 'Etiquetas' },
-  { href: '/planes',     icon: Sparkles,        label: 'Planes'       },
-  { href: '/feedback',   icon: MessageSquare,   label: 'Feedback'     },
-  { href: '/papelera',   icon: Trash2,          label: 'Papelera'     },
-  ...(isAdmin ? [{ href: '/backoffice', icon: Settings, label: 'Backoffice' }] : []),
-]
+  { href: "/recetario", icon: UtensilsCrossed, label: "Mi recetario" },
+  { href: "/etiquetas", icon: Tag, label: "Etiquetas" },
+  { href: "/planes", icon: Sparkles, label: "Planes" },
+  { href: "/feedback", icon: MessageSquare, label: "Feedback" },
+  { href: "/papelera", icon: Trash2, label: "Papelera" },
+  ...(isAdmin
+    ? [{ href: "/backoffice", icon: Settings, label: "Backoffice" }]
+    : []),
+];
 
 export default function MobileMenu({ isAdmin, userEmail, plan }: Props) {
-  const [open, setOpen] = useState(false)
+  const [open, setOpen] = useState(false);
 
   return (
     <>
@@ -41,21 +44,27 @@ export default function MobileMenu({ isAdmin, userEmail, plan }: Props) {
       )}
 
       {/* Drawer */}
-      <div className={`fixed top-0 right-0 h-full w-72 bg-white z-50 shadow-xl transition-transform duration-300 md:hidden ${
-        open ? 'translate-x-0' : 'translate-x-full'
-      }`}>
+      <div
+        className={`fixed top-0 right-0 h-full w-72 bg-white z-50 shadow-xl transition-transform duration-300 md:hidden ${
+          open ? "translate-x-0" : "translate-x-full"
+        }`}
+      >
         {/* Header del drawer */}
         <div className="flex items-center justify-between px-5 py-4 border-b border-stone-100">
           <div className="flex flex-col">
             <span className="font-serif text-stone-900">mis recetas</span>
-            <span className="text-xs text-stone-400 mt-0.5 truncate max-w-[180px]">{userEmail}</span>
-            {plan !== 'free' && (
-              <span className={`text-xs font-medium px-2 py-0.5 rounded-md w-fit mt-1 ${
-                plan === 'lifetime'
-                  ? 'bg-amber-100 text-amber-700'
-                  : 'bg-stone-100 text-stone-600'
-              }`}>
-                {plan === 'lifetime' ? '✦ Lifetime' : '★ Pro'}
+            <span className="text-xs text-stone-400 mt-0.5 truncate max-w-[180px]">
+              {userEmail}
+            </span>
+            {plan !== "free" && (
+              <span
+                className={`text-xs font-medium px-2 py-0.5 rounded-md w-fit mt-1 ${
+                  plan === "lifetime"
+                    ? "bg-amber-100 text-amber-700"
+                    : "bg-stone-100 text-stone-600"
+                }`}
+              >
+                {plan === "lifetime" ? "✦ Lifetime" : "★ Pro"}
               </span>
             )}
           </div>
@@ -69,7 +78,7 @@ export default function MobileMenu({ isAdmin, userEmail, plan }: Props) {
 
         {/* Items */}
         <nav className="flex flex-col py-2">
-          {MENU_ITEMS(isAdmin).map(item => (
+          {MENU_ITEMS(isAdmin).map((item) => (
             <Link
               key={item.href}
               href={item.href}
@@ -96,5 +105,5 @@ export default function MobileMenu({ isAdmin, userEmail, plan }: Props) {
         </div>
       </div>
     </>
-  )
+  );
 }
