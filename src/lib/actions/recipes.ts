@@ -133,3 +133,28 @@ export async function getDeletedRecipes() {
   if (error) throw error
   return data
 }
+
+export async function getPublicRecipe(id: string) {
+  const { createClient } = await import('@supabase/supabase-js')
+  const supabase = createClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+  )
+  const { data } = await supabase
+    .from('recipes')
+    .select('id, title, category, method, time, notes, steps, ingredients, condiments')
+    .eq('id', id)
+    .is('deleted_at', null)
+    .single()
+  return data
+}
+
+export async function togglePublic(id: string, value: boolean) {
+  const supabase = await createClient()
+  const { error } = await supabase
+    .from('recipes')
+    .update({ is_public: value })
+    .eq('id', id)
+  if (error) throw error
+  revalidatePath(`/recetas/${id}`)
+}

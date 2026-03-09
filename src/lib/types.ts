@@ -1,72 +1,95 @@
 import {
-  Sun, UtensilsCrossed, Coffee, Moon,
-  Cake, Cookie, GlassWater, Pin,
-  type LucideIcon
-} from 'lucide-react'
+  Sun,
+  UtensilsCrossed,
+  Coffee,
+  Moon,
+  Cake,
+  Cookie,
+  GlassWater,
+  Pin,
+  type LucideIcon,
+} from "lucide-react";
 
 export const LUCIDE_ICONS: Record<string, LucideIcon> = {
-  Sun, UtensilsCrossed, Coffee, Moon,
-  Cake, Cookie, GlassWater, Pin,
-}
+  Sun,
+  UtensilsCrossed,
+  Coffee,
+  Moon,
+  Cake,
+  Cookie,
+  GlassWater,
+  Pin,
+};
 
 export type Ingredient = {
-  qty:  string
-  unit: string
-  name: string
-}
+  qty: string;
+  unit: string;
+  name: string;
+};
 
 export type Recipe = {
-  id:          string
-  user_id:     string
-  title:       string
-  category:    string
-  method:      string | null
-  time:        string | null
-  notes:       string | null
-  steps:       string | null
-  ingredients: Ingredient[]
-  is_favorite: boolean
-  created_at:  string
-  updated_at:  string
-  deleted_at:  string | null
-  condiments: string[]
-}
+  id: string;
+  user_id: string;
+  title: string;
+  category: string;
+  method: string | null;
+  time: string | null;
+  notes: string | null;
+  steps: string | null;
+  ingredients: Ingredient[];
+  is_favorite: boolean;
+  created_at: string;
+  updated_at: string;
+  deleted_at: string | null;
+  condiments: string[];
+  is_public: boolean;
+};
 
 export type Category = {
-  id:       string
-  name:     string
-  icon:     string | null
-  position: number
-}
+  id: string;
+  name: string;
+  icon: string | null;
+  position: number;
+};
 
 export type Unit = {
-  id:       string
-  label:    string
-  value:    string
-  position: number
-}
+  id: string;
+  label: string;
+  value: string;
+  position: number;
+};
 
 export type Method = {
-  id:       string
-  name:     string
-  position: number
-}
+  id: string;
+  name: string;
+  position: number;
+};
 
 export type TimeRange = {
-  id:       string
-  label:    string
-  minutes:  number
-  position: number
-}
+  id: string;
+  label: string;
+  minutes: number;
+  position: number;
+};
 
 export type Tag = {
-  id: string
-  name: string
-  color: string
-}
+  id: string;
+  name: string;
+  color: string;
+};
 
-export type RecipeInsert = Omit<Recipe, 'id' | 'user_id' | 'is_favorite' | 'created_at' | 'updated_at' | 'deleted_at'>
+export type RecipeInsert = Omit<
+  Recipe,
+  "id" | "user_id" | "is_favorite" | "created_at" | "updated_at" | "deleted_at"
+>;
 
-export type RecipeListItem = Pick<Recipe,
-  'id' | 'title' | 'category' | 'time' | 'is_favorite' | 'ingredients' | 'condiments'
-> & { tags: Tag[] }
+export type RecipeListItem = Pick<
+  Recipe,
+  | "id"
+  | "title"
+  | "category"
+  | "time"
+  | "is_favorite"
+  | "ingredients"
+  | "condiments"
+> & { tags: Tag[] };

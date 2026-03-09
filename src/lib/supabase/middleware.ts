@@ -1,7 +1,7 @@
 import { createServerClient } from '@supabase/ssr'
 import { NextResponse, type NextRequest } from 'next/server'
 
-const ADMIN_ID = '994b20b5-87bc-4772-9f50-6d888f966b89'
+const ADMIN_ID = process.env.ADMIN_ID!
 
 export async function updateSession(request: NextRequest) {
   let response = NextResponse.next({ request })
@@ -31,22 +31,24 @@ export async function updateSession(request: NextRequest) {
   const { pathname } = request.nextUrl
 
   const isAuthRoute  = pathname.startsWith('/login') || pathname.startsWith('/register')
-  const isPublic     = pathname === '/' || isAuthRoute
+  const isPublic     = pathname === '/' || isAuthRoute || pathname.startsWith('/r/')
   const isBackoffice = pathname.startsWith('/backoffice')
+  const isApiImport  = pathname.startsWith('/api/import-recipe')
 
-  // no logueado → solo puede ver rutas públicas
   if (!user && !isPublic) {
     return NextResponse.redirect(new URL('/login', request.url))
   }
 
-  // logueado → no puede ir a login/register, lo mandamos al recetario
   if (user && isAuthRoute) {
     return NextResponse.redirect(new URL('/recetario', request.url))
   }
 
-  // no admin → no puede ir al backoffice
   if (isBackoffice && user?.id !== ADMIN_ID) {
     return NextResponse.redirect(new URL('/recetario', request.url))
+  }
+
+  if (isApiImport && !user) {
+    return NextResponse.json({ error: 'No autorizado' }, { status: 401 })
   }
 
   return response

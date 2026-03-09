@@ -1,12 +1,13 @@
 import Link from "next/link";
+import { notFound } from "next/navigation";
 import { getRecipe } from "@/lib/actions/recipes";
 import { getRecipeTags } from '@/lib/actions/tags'
 import { Clock, ArrowLeft, Pencil, ChefHat } from "lucide-react";
-import DeleteButton from "./DeleteButton";
-import CookingModeButton from "./CookingModeButton";
 import PortionScaler from "./PortionScaler";
-import { notFound } from "next/navigation";
+import CookingModeButton from "./CookingModeButton";
 import FavoriteButton from "./FavoriteButton";
+import ShareButton from './ShareButton'
+import DeleteButton from "./DeleteButton";
 
 import type { Ingredient, Tag } from '@/lib/types'
 
@@ -55,6 +56,7 @@ export default async function RecipePage({
           </Link>
           <FavoriteButton id={recipe.id} isFavorite={recipe.is_favorite} />
           <DeleteButton id={recipe.id} />
+          <ShareButton id={recipe.id} isPublic={recipe.is_public ?? false} />
         </div>
       </div>
 
