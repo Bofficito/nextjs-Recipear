@@ -1,22 +1,22 @@
-import { getRecipes } from '@/lib/actions/recipes'
-import { getCategories } from '@/lib/actions/backoffice'
-import { getProfileWithLimits } from '@/lib/actions/profile'
-import { Plus } from 'lucide-react'
-import RecipeList from '@/components/recipes/RecipeList'
-import Link from 'next/link'
+import { getRecipes } from "@/lib/actions/recipes";
+import { getCategories } from "@/lib/actions/backoffice";
+import { getProfileWithLimits } from "@/lib/actions/profile";
+import { Plus } from "lucide-react";
+import RecipeList from "@/components/recipes/RecipeList";
+import Link from "next/link";
 
-export const metadata = { title: 'Mi recetario' }
+export const metadata = { title: "Mi recetario" };
 
 export default async function HomePage() {
   const [recipes, categories, profile] = await Promise.all([
     getRecipes(),
     getCategories(),
     getProfileWithLimits(),
-  ])
+  ]);
 
-  const count      = recipes.length
-  const maxRecipes = profile?.max_recipes ?? 15
-  const isFree     = profile?.plan === 'free'
+  const count = recipes.length;
+  const maxRecipes = profile?.max_recipes ?? 15;
+  const isFree = profile?.plan === "free";
 
   return (
     <div className="flex flex-col gap-6">
@@ -25,12 +25,14 @@ export default async function HomePage() {
           <h1 className="font-serif text-3xl text-stone-900">Recetario</h1>
           <div className="flex items-center gap-2 mt-0.5">
             {isFree ? (
-              <p className={`text-sm ${count >= maxRecipes ? 'text-red-400' : 'text-stone-400'}`}>
-                {count}/{maxRecipes} guardada{count !== 1 ? 's' : ''}
+              <p
+                className={`text-sm ${count >= maxRecipes ? "text-red-400" : "text-stone-400"}`}
+              >
+                {count}/{maxRecipes} guardada{count !== 1 ? "s" : ""}
               </p>
             ) : (
               <p className="text-sm text-stone-400">
-                {count} guardada{count !== 1 ? 's' : ''}
+                {count} guardada{count !== 1 ? "s" : ""}
               </p>
             )}
 
@@ -53,7 +55,7 @@ export default async function HomePage() {
         </Link>
       </div>
 
-      <RecipeList recipes={recipes as any} categories={categories} />
+      <RecipeList recipes={recipes as any} categories={categories} tags={[]} />
     </div>
-  )
+  );
 }

@@ -8,6 +8,7 @@ import CookingModeButton from "./CookingModeButton";
 import FavoriteButton from "./FavoriteButton";
 import ShareButton from './ShareButton'
 import DeleteButton from "./DeleteButton";
+import DownloadPDFButton from './DownloadPDFButton'
 
 import type { Ingredient, Tag } from '@/lib/types'
 
@@ -57,6 +58,7 @@ export default async function RecipePage({
           <FavoriteButton id={recipe.id} isFavorite={recipe.is_favorite} />
           <DeleteButton id={recipe.id} />
           <ShareButton id={recipe.id} isPublic={recipe.is_public ?? false} />
+          <DownloadPDFButton id={recipe.id} />
         </div>
       </div>
 

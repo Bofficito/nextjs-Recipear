@@ -1,4 +1,4 @@
-import { UtensilsCrossed, LogOut, Settings, Trash2, MessageSquare, Sparkles, Tag } from 'lucide-react'
+import { UtensilsCrossed, LogOut, Settings, Trash2, MessageSquare, Sparkles, Tag, BookOpen } from 'lucide-react'
 import Link from 'next/link'
 import { logout } from '@/lib/actions/auth'
 import { createClient } from '@/lib/supabase/server'
@@ -66,6 +66,12 @@ export default async function Header() {
           <Tooltip label="Etiquetas">
             <Link href="/etiquetas" className="text-stone-400 hover:text-stone-900 transition-colors">
               <Tag size={16} />
+            </Link>
+          </Tooltip>
+
+          <Tooltip label="Exportar recetario">
+            <Link href="/exportar" className="text-stone-400 hover:text-stone-900 transition-colors">
+              <BookOpen size={16} />
             </Link>
           </Tooltip>
 

@@ -40,6 +40,20 @@ export async function getRecipeCount() {
   return count ?? 0
 }
 
+export async function getRecipesForExport() {
+  const supabase = await createClient()
+  const { data, error } = await supabase
+    .from('recipes')
+    .select('id, title, category, method, time, notes, steps, ingredients, condiments, recipe_tags(tag:tags(id, name, color))')
+    .is('deleted_at', null)
+    .order('created_at', { ascending: false })
+  if (error) throw error
+  return data.map(r => ({
+    ...r,
+    tags: (r.recipe_tags ?? []).map((rt: any) => rt.tag),
+  }))
+}
+
 export async function createRecipe(recipe: RecipeInsert): Promise<string> {
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()

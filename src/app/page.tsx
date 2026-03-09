@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import { UtensilsCrossed, ChefHat, Heart, Search, Scale, Trash2 } from 'lucide-react'
+import { UtensilsCrossed, ChefHat, Heart, Search, Scale, Trash2, Tag, Link2, FileDown, Share2 } from 'lucide-react'
 import { createClient } from '@/lib/supabase/server'
 import { logout } from '@/lib/actions/auth'
 import ExploraButton from './(landing)/ExploreButton'
@@ -8,33 +8,75 @@ const features = [
   {
     icon: ChefHat,
     title: 'Modo cocina',
-    desc:  'Pantalla limpia paso a paso. Sin distracciones, sin que se apague el celular.',
+    desc: 'Pantalla limpia paso a paso. Sin distracciones, sin que se apague el celular.',
   },
   {
-    icon: Scale,
-    title: 'Escalar porciones',
-    desc:  'Ajustá las cantidades en tiempo real según cuántas personas van a comer.',
+    icon: Share2,
+    title: 'Compartir recetas',
+    desc: 'Generá un link público para compartir cualquier receta con quien quieras.',
+  },
+  {
+    icon: Tag,
+    title: 'Etiquetas personalizadas',
+    desc: 'Creá grupos a tu medida. Sin gluten, Para invitados, Recetas de la abuela, etc.',
+  },
+  {
+    icon: FileDown,
+    title: 'Exportar en PDF',
+    desc: 'Descargá una receta suelta o tu recetario completo como book en PDF.',
+  },
+  {
+    icon: UtensilsCrossed,
+    title: 'Métodos de preparación',
+    desc: 'Clasificá tus recetas por técnica — horno, sartén, vapor, plancha y más.',
   },
   {
     icon: Heart,
     title: 'Favoritos',
-    desc:  'Marcá las recetas que más usás y encontralas al instante.',
+    desc: 'Marcá las recetas que más usás y encontralas al instante.',
   },
   {
     icon: Search,
     title: 'Búsqueda por ingrediente',
-    desc:  'Buscá por nombre o por ingrediente. Filtrá por categoría.',
+    desc: 'Buscá por nombre o por ingrediente. Filtrá por categoría.',
+  },
+  {
+    icon: Link2,
+    title: 'Importar desde URL',
+    desc: 'Pegá el link de cualquier receta de internet y la importamos automáticamente.',
   },
   {
     icon: Trash2,
     title: 'Papelera con recuperación',
-    desc:  'Las recetas eliminadas se guardan 7 días antes de borrarse definitivamente.',
+    desc: 'Las recetas eliminadas se guardan 7 días antes de borrarse definitivamente.',
+  },
+]
+
+const plans = [
+  {
+    name: 'Free',
+    desc: 'Para empezar.',
+    features: ['15 recetas', '10 ingredientes por receta', 'Todas las funciones básicas'],
+    cta: 'Empezar gratis',
+    href: '/register',
+    highlight: false,
   },
   {
-  icon: UtensilsCrossed,
-  title: 'Métodos de preparación',
-  desc:  'Clasificá tus recetas por técnica — horno, sartén, vapor, plancha y más.',
-},
+    name: 'Pro',
+    desc: 'Para los que cocinan seguido.',
+    features: ['30 recetas', '20 ingredientes por receta', 'Etiquetas personalizadas (hasta 5)'],
+    cta: 'Elegir Pro',
+    href: '/register',
+    highlight: true,
+  },
+  {
+    name: 'Lifetime',
+    desc: 'Una vez y para siempre.',
+    features: ['Recetas ilimitadas', 'Ingredientes ilimitados', 'Etiquetas ilimitadas', 'Exportar book PDF', 'Acceso a todas las features futuras'],
+    cta: 'Obtener Lifetime',
+    href: '/register',
+    highlight: false,
+  },
 ]
 
 export default async function LandingPage() {
@@ -94,13 +136,10 @@ export default async function LandingPage() {
             Tu recetario,<br />
             <span className="text-stone-400">siempre a mano.</span>
           </h1>
-
           <p className="text-lg text-stone-500 leading-relaxed mb-10 max-w-lg">
-            Guardá, organizá y cociná tus recetas desde cualquier lado, 
-            <br />
-            sin perder nada.
+            Guardá, organizá y cociná tus recetas desde cualquier lado,
+            <br />sin perder nada.
           </p>
-
           <div className="flex items-center gap-4">
             {user ? (
               <Link
@@ -110,9 +149,7 @@ export default async function LandingPage() {
                 Ir a mi recetario →
               </Link>
             ) : (
-              <>
-                <ExploraButton />
-              </>
+              <ExploraButton />
             )}
           </div>
         </div>
@@ -146,8 +183,8 @@ export default async function LandingPage() {
               <div className="h-9 bg-stone-50 border border-stone-200 rounded-xl" />
               {[
                 { title: 'Tarta de espinaca y ricota', cat: 'Almuerzo', time: '45 min', ings: 8 },
-                { title: 'Bifes a la portuguesa',     cat: 'Cena',     time: '30 min', ings: 6, fav: true },
-                { title: 'Medialunas de manteca',     cat: 'Desayuno', time: '2 hs',   ings: 7 },
+                { title: 'Bifes a la portuguesa', cat: 'Cena', time: '30 min', ings: 6, fav: true },
+                { title: 'Medialunas de manteca', cat: 'Desayuno', time: '2 hs', ings: 7 },
               ].map((r, i) => (
                 <div key={i} className="border border-stone-200 rounded-xl p-4">
                   <div className="flex items-center justify-between mb-2">
@@ -187,6 +224,55 @@ export default async function LandingPage() {
         </div>
       </section>
 
+      {/* Planes */}
+      <section id="planes" className="max-w-4xl mx-auto px-6 py-24 border-t border-stone-200">
+        <h2 className="font-serif text-3xl text-stone-900 mb-4">
+          Planes
+        </h2>
+        <p className="text-stone-400 mb-14 max-w-md">
+          Empezá gratis y expandí cuando lo necesites.
+        </p>
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
+          {plans.map((plan, i) => (
+            <div
+              key={i}
+              className={`rounded-2xl p-6 flex flex-col gap-4 border ${
+                plan.highlight
+                  ? 'bg-stone-900 border-stone-900'
+                  : 'bg-white border-stone-200'
+              }`}
+            >
+              <div>
+                <h3 className={`font-serif text-xl mb-1 ${plan.highlight ? 'text-white' : 'text-stone-900'}`}>
+                  {plan.name}
+                </h3>
+                <p className={`text-sm ${plan.highlight ? 'text-stone-400' : 'text-stone-400'}`}>
+                  {plan.desc}
+                </p>
+              </div>
+              <ul className="flex flex-col gap-2 flex-1">
+                {plan.features.map((f, j) => (
+                  <li key={j} className="flex items-start gap-2">
+                    <span className={`mt-0.5 text-xs ${plan.highlight ? 'text-stone-400' : 'text-stone-300'}`}>✓</span>
+                    <span className={`text-sm ${plan.highlight ? 'text-stone-300' : 'text-stone-500'}`}>{f}</span>
+                  </li>
+                ))}
+              </ul>
+              <Link
+                href={user ? '/planes' : plan.href}
+                className={`mt-2 text-center text-sm px-4 py-2.5 rounded-xl transition-colors ${
+                  plan.highlight
+                    ? 'bg-white text-stone-900 hover:bg-stone-100'
+                    : 'bg-stone-900 text-white hover:bg-stone-700'
+                }`}
+              >
+                {plan.cta}
+              </Link>
+            </div>
+          ))}
+        </div>
+      </section>
+
       {/* CTA final */}
       <section className="max-w-4xl mx-auto px-6 py-24">
         <div className="bg-stone-900 rounded-3xl px-10 py-14 text-center">
@@ -221,7 +307,26 @@ export default async function LandingPage() {
             <UtensilsCrossed size={14} className="text-stone-400" />
             <span className="font-serif text-stone-400">Recipear</span>
           </div>
-          <span className="text-xs text-stone-300">Hecho con 🤍 en Buenos Aires</span>
+          <div className="flex items-center gap-4">
+            <span className="text-xs text-stone-300">Desarrollado por</span>
+            <a
+              href="https://www.lautaroboffi.com/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-xs text-stone-300 hover:text-stone-600 transition-colors"
+            >
+              Lautaro Boffi
+            </a>
+            <span className="text-xs text-stone-300"> / </span>
+            <a
+              href="https://github.com/Bofficito"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-xs text-stone-300 hover:text-stone-600 transition-colors"
+            >
+              GitHub
+            </a>
+          </div>
         </div>
       </footer>
 

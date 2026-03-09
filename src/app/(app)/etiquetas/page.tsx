@@ -1,4 +1,3 @@
-// src/app/(app)/etiquetas/page.tsx
 import { getTags } from '@/lib/actions/tags'
 import { getProfileWithLimits } from '@/lib/actions/profile'
 import { ArrowLeft, Lock } from 'lucide-react'
@@ -11,9 +10,10 @@ export default async function EtiquetasPage() {
     getProfileWithLimits(),
   ])
 
-  const isLifetime = profile?.plan === 'lifetime'
+  const canUseTags = profile?.plan !== 'free'
+  const maxTags = profile?.max_tags ?? 0
 
-  if (!isLifetime) return (
+  if (!canUseTags) return (
     <div className="flex flex-col gap-6">
       <Link
         href="/recetario"
@@ -26,7 +26,7 @@ export default async function EtiquetasPage() {
         <Lock size={28} className="text-stone-300" />
         <h1 className="font-serif text-3xl text-stone-900">Etiquetas</h1>
         <p className="text-sm text-stone-400 max-w-sm">
-          Las etiquetas personalizadas son una feature exclusiva del plan Lifetime.
+          Las etiquetas personalizadas están disponibles a partir del plan Pro.
         </p>
         <Link
           href="/planes"
@@ -50,17 +50,15 @@ export default async function EtiquetasPage() {
         </Link>
         <h1 className="font-serif text-3xl text-stone-900">Etiquetas</h1>
         <p className="text-sm text-stone-400 mt-1">Organizá tus recetas con etiquetas personalizadas.</p>
-
-        {/* Agregar esto: */}
         <div className="bg-stone-50 border border-stone-200 rounded-xl px-4 py-3 mt-3">
-        <p className="text-sm text-stone-600 leading-relaxed">
-            Las etiquetas te permiten agrupar recetas por cualquier criterio que se te ocurra — 
-            por ejemplo <span className="font-medium">sin gluten</span>, <span className="font-medium">para invitados</span> o <span className="font-medium">favoritas de los chicos</span>. 
+          <p className="text-sm text-stone-600 leading-relaxed">
+            Las etiquetas te permiten agrupar recetas por cualquier criterio —
+            por ejemplo <span className="font-medium">sin gluten</span>, <span className="font-medium">para invitados</span> o <span className="font-medium">favoritas de los chicos</span>.
             Una vez creadas, podés asignarlas al crear o editar una receta y filtrar por ellas desde el recetario.
-        </p>
+          </p>
         </div>
       </div>
-      <EtiquetasClient tags={tags} />
+      <EtiquetasClient tags={tags} maxTags={maxTags} />
     </div>
   )
 }

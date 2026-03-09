@@ -28,8 +28,8 @@ export async function getProfileWithLimits() {
       .single(),
     supabase
       .from('plan_limits')
-      .select('max_recipes, max_ingredients')
-      .eq('plan', 'free') // fallback, se pisa abajo
+      .select('max_recipes, max_ingredients, max_tags')
+      .eq('plan', 'free')
       .single(),
   ])
 
@@ -44,7 +44,7 @@ export async function getProfileWithLimits() {
 
   const { data: planLimits } = await supabase
     .from('plan_limits')
-    .select('max_recipes, max_ingredients')
+    .select('max_recipes, max_ingredients, max_tags')
     .eq('plan', effectivePlan)
     .single()
 
@@ -54,6 +54,7 @@ export async function getProfileWithLimits() {
     plan_expires_at: profile.plan_expires_at,
     max_recipes: planLimits == null ? 15 : planLimits.max_recipes,
     max_ingredients: planLimits == null ? 10 : planLimits.max_ingredients,
+    max_tags: planLimits == null ? 0 : planLimits.max_tags,
   }
 }
 
