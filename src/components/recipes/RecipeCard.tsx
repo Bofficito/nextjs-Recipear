@@ -22,15 +22,29 @@ export default function RecipeCard({ recipe }: { recipe: RecipeListItem }) {
       </h3>
 
       <div className="flex items-center gap-4">
-        {recipe.time && (
-          <span className="text-xs text-stone-400">⏱ {recipe.time}</span>
-        )}
-        {recipe.ingredients && recipe.ingredients.length > 0 && (
-          <span className="text-xs text-stone-400">
-            {recipe.ingredients.length} ingredientes
+      {recipe.time && (
+        <span className="text-xs text-stone-400">⏱ {recipe.time}</span>
+      )}
+      {recipe.ingredients && recipe.ingredients.length > 0 && (
+        <span className="text-xs text-stone-400">
+          {recipe.ingredients.length} ingredientes
+        </span>
+      )}
+    </div>
+
+    {recipe.tags && recipe.tags.length > 0 && (
+      <div className="flex flex-wrap gap-1.5 mt-2">
+        {recipe.tags.map(tag => (
+          <span
+            key={tag.id}
+            className="text-xs px-2 py-0.5 rounded-md font-medium"
+            style={{ backgroundColor: tag.color + '22', color: tag.color }}
+          >
+            {tag.name}
           </span>
-        )}
+        ))}
       </div>
+    )}
     </Link>
   )
 }

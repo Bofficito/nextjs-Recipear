@@ -1,44 +1,51 @@
 'use client'
 import { useState } from 'react'
-import { createRecipe }  from '@/lib/actions/recipes'
-import RecipeForm        from '@/components/recipes/RecipeForm'
-import ImportFromUrl     from './ImportFromUrl'
-import { useToast }      from '@/components/ui/ToastProvider'
-import type { RecipeInsert, Category, Unit, Method, TimeRange } from '@/lib/types'
-import { ArrowLeft }     from 'lucide-react'
-import Link              from 'next/link'
+import { useRouter } from 'next/navigation'
+import { createRecipe } from '@/lib/actions/recipes'
+import { setRecipeTags } from '@/lib/actions/tags'
+import RecipeForm from '@/components/recipes/RecipeForm'
+import ImportFromUrl from './ImportFromUrl'
+import { useToast } from '@/components/ui/ToastProvider'
+import type { RecipeInsert, Category, Unit, Method, TimeRange, Tag } from '@/lib/types'
+import { ArrowLeft } from 'lucide-react'
+import Link from 'next/link'
 
 type Props = {
-  categories:     Category[]
-  units:          Unit[]
-  methods:        Method[]
-  timeRanges:     TimeRange[]
-  isPro:          boolean
-  limitReached:   boolean
-  maxIngredients: number
+  categories: Category[]
+  units: Unit[]
+  methods: Method[]
+  timeRanges: TimeRange[]
+  isPro: boolean
+  limitReached: boolean
+  maxIngredients: number | null
+  tags: Tag[]
 }
 
-export default function NuevaRecetaClient({ categories, units, methods, timeRanges, isPro, limitReached, maxIngredients }: Props) {
+export default function NuevaRecetaClient({
+  categories, units, methods, timeRanges,
+  isPro, limitReached, maxIngredients, tags,
+}: Props) {
   const [pending, setPending] = useState(false)
   const [prefill, setPrefill] = useState<RecipeInsert | undefined>()
-  const { showToast }         = useToast()
+  const { showToast } = useToast()
+  const router = useRouter()
 
-  async function handleSubmit(data: RecipeInsert) {
-  setPending(true)
-  try {
-    await createRecipe(data)
-    showToast('Receta guardada ✓')
-  } catch (e: any) {
-    // Next.js lanza un error especial al hacer redirect() — no es un error real
-    if (e?.digest?.startsWith('NEXT_REDIRECT')) return
-    setPending(false)
-    if (e?.message === 'LIMIT_REACHED') {
-      showToast('Llegaste al límite de recetas del plan gratuito')
-    } else {
-      showToast('Ocurrió un error al guardar')
+  async function handleSubmit(data: RecipeInsert, tagIds: string[]) {
+    setPending(true)
+    try {
+      const recipeId = await createRecipe(data)
+      if (tagIds.length > 0) await setRecipeTags(recipeId, tagIds)
+      showToast('Receta guardada ✓')
+      router.push('/recetario')
+    } catch (e: any) {
+      setPending(false)
+      if (e?.message === 'LIMIT_REACHED') {
+        showToast('Llegaste al límite de recetas del plan gratuito')
+      } else {
+        showToast('Ocurrió un error al guardar')
+      }
     }
   }
-}
 
   return (
     <div className="flex flex-col gap-8">
@@ -84,6 +91,7 @@ export default function NuevaRecetaClient({ categories, units, methods, timeRang
             methods={methods}
             timeRanges={timeRanges}
             maxIngredients={maxIngredients}
+            tags={tags}
           />
         </>
       )}

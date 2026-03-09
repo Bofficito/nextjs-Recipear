@@ -1,6 +1,7 @@
 import { getRecipe } from '@/lib/actions/recipes'
 import { getCategories, getUnits, getMethods, getTimeRanges } from '@/lib/actions/backoffice'
 import { getProfileWithLimits } from '@/lib/actions/profile'
+import { getTags, getRecipeTags } from '@/lib/actions/tags'
 import EditarRecetaClient from './EditarRecetaClient'
 import { notFound } from 'next/navigation'
 
@@ -10,13 +11,15 @@ export default async function EditarRecetaPage({
   params: Promise<{ id: string }>
 }) {
   const { id } = await params
-  const [recipe, categories, units, methods, timeRanges, profile] = await Promise.all([
+  const [recipe, categories, units, methods, timeRanges, profile, tags, recipeTags] = await Promise.all([
     getRecipe(id),
     getCategories(),
     getUnits(),
     getMethods(),
     getTimeRanges(),
     getProfileWithLimits(),
+    getTags(),
+    getRecipeTags(id),
   ])
 
   if (!recipe) notFound()
@@ -29,6 +32,8 @@ export default async function EditarRecetaPage({
       methods={methods}
       timeRanges={timeRanges}
       maxIngredients={profile?.max_ingredients ?? null}
+      tags={tags}
+      initialTags={recipeTags.map(t => t.id)}
     />
   )
 }

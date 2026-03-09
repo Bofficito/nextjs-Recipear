@@ -1,24 +1,25 @@
 'use client'
 import { useState } from 'react'
-import type { Recipe, Ingredient, RecipeInsert, Category, Unit, Method, TimeRange } from '@/lib/types'
+import type { Recipe, Ingredient, RecipeInsert, Category, Unit, Method, TimeRange, Tag } from '@/lib/types'
 import { X, ChevronDown } from 'lucide-react'
 import Link from 'next/link'
 import CondimentsInput from './CondimentsInput'
-
+import TagSelector from './TagSelector'
 
 type Props = {
   initial?: Recipe
-  onSubmit: (data: RecipeInsert) => Promise<void>
+  onSubmit: (data: RecipeInsert, tagIds: string[]) => Promise<void>
   pending?: boolean
   categories: Category[]
-  units:  Unit[]
+  units: Unit[]
   methods: Method[]
   timeRanges: TimeRange[]
   maxIngredients: number | null
+  tags: Tag[]
+  initialTags?: string[]
 }
 
 const emptyIngredient = (): Ingredient => ({ qty: '', unit: '', name: '' })
-
 const selectClass = "appearance-none w-full border border-stone-200 rounded-xl pl-4 pr-9 py-3 text-stone-900 bg-white outline-none focus:border-stone-400 transition-colors cursor-pointer"
 const selectSmallClass = "appearance-none w-full border border-stone-200 rounded-lg pl-2 pr-7 py-2.5 text-sm text-stone-900 bg-white outline-none focus:border-stone-400 transition-colors cursor-pointer"
 
@@ -34,7 +35,7 @@ function SelectWrapper({ children }: { children: React.ReactNode }) {
 export default function RecipeForm({
   initial, onSubmit, pending,
   categories, units, methods, timeRanges,
-  maxIngredients,
+  maxIngredients, tags, initialTags,
 }: Props) {
   const [title, setTitle] = useState(initial?.title ?? '')
   const [category, setCategory] = useState(initial?.category ?? categories[0]?.name ?? '')
@@ -43,12 +44,16 @@ export default function RecipeForm({
   const [notes, setNotes] = useState(initial?.notes ?? '')
   const [steps, setSteps] = useState(initial?.steps ?? '')
   const [condiments, setCondiments] = useState<string[]>(initial?.condiments ?? [])
+  const [selectedTags, setSelectedTags] = useState<string[]>(initialTags ?? [])
   const [ingredients, setIngredients] = useState<Ingredient[]>(
     initial?.ingredients?.length
       ? [...initial.ingredients, emptyIngredient()]
       : [emptyIngredient()]
   )
   const [error, setError] = useState('')
+
+  const filledCount = ingredients.filter(i => i.name.trim()).length
+  const atLimit = maxIngredients !== null && filledCount >= maxIngredients
 
   function updateIngredient(i: number, field: keyof Ingredient, value: string) {
     setIngredients(prev => {
@@ -72,19 +77,16 @@ export default function RecipeForm({
     if (!title.trim()) { setError('El nombre es obligatorio'); return }
     const filtered = ingredients.filter(ing => ing.name.trim())
     await onSubmit({
-      title:       title.trim(),
+      title: title.trim(),
       category,
-      method:      method || null,
-      time:        timeRange || null,
-      notes:       notes.trim() || null,
-      steps:       steps.trim() || null,
+      method: method || null,
+      time: timeRange || null,
+      notes: notes.trim() || null,
+      steps: steps.trim() || null,
       ingredients: filtered,
       condiments,
-    })
+    }, selectedTags)
   }
-
-  const filledCount = ingredients.filter(i => i.name.trim()).length
-  const atLimit = maxIngredients !== null && filledCount >= maxIngredients
 
   return (
     <form onSubmit={handleSubmit} className="flex flex-col gap-6">
@@ -94,7 +96,6 @@ export default function RecipeForm({
         </div>
       )}
 
-      {/* Nombre */}
       <div className="flex flex-col gap-1.5">
         <label className="text-xs uppercase tracking-wider text-stone-400">Nombre *</label>
         <input
@@ -105,7 +106,6 @@ export default function RecipeForm({
         />
       </div>
 
-      {/* Categoría + Método */}
       <div className="grid grid-cols-2 gap-4">
         <div className="flex flex-col gap-1.5">
           <label className="text-xs uppercase tracking-wider text-stone-400">Categoría</label>
@@ -117,7 +117,6 @@ export default function RecipeForm({
             </select>
           </SelectWrapper>
         </div>
-
         <div className="flex flex-col gap-1.5">
           <label className="text-xs uppercase tracking-wider text-stone-400">Método</label>
           <SelectWrapper>
@@ -131,7 +130,6 @@ export default function RecipeForm({
         </div>
       </div>
 
-      {/* Tiempo */}
       <div className="flex flex-col gap-1.5">
         <label className="text-xs uppercase tracking-wider text-stone-400">Tiempo</label>
         <div className="grid grid-cols-2 gap-3">
@@ -157,7 +155,6 @@ export default function RecipeForm({
         <p className="text-xs text-stone-400">Seleccioná un rango o escribí el tiempo exacto</p>
       </div>
 
-      {/* Nota */}
       <div className="flex flex-col gap-1.5">
         <label className="text-xs uppercase tracking-wider text-stone-400">Nota personal</label>
         <input
@@ -168,7 +165,6 @@ export default function RecipeForm({
         />
       </div>
 
-      {/* Ingredientes */}
       <div className="flex flex-col gap-2">
         <div className="flex items-center justify-between">
           <label className="text-xs uppercase tracking-wider text-stone-400">Ingredientes</label>
@@ -176,7 +172,6 @@ export default function RecipeForm({
             {maxIngredients === null ? `${filledCount} ingredientes` : `${filledCount}/${maxIngredients}`}
           </span>
         </div>
-
         {ingredients.map((ing, i) => {
           const isLast = i === ingredients.length - 1
           if (isLast && atLimit) return (
@@ -190,52 +185,55 @@ export default function RecipeForm({
           )
           return (
             <div key={i} className="grid grid-cols-[4rem_1fr_2fr_2rem] gap-2 items-center">
-            <input
-              value={ing.qty}
-              onChange={e => updateIngredient(i, 'qty', e.target.value)}
-              placeholder="1, 2, 3..."
-              className="border border-stone-200 rounded-lg px-2 py-2.5 text-sm text-stone-900 bg-white outline-none focus:border-stone-400 transition-colors"
-            />
-            <SelectWrapper>
-              <select
-                value={ing.unit}
-                onChange={e => updateIngredient(i, 'unit', e.target.value)}
-                className={selectSmallClass}
-              >
-                {units.map(u => (
-                  <option key={u.id} value={u.value}>{u.label}</option>
-                ))}
-              </select>
-            </SelectWrapper>
-            <input
-              value={ing.name}
-              onChange={e => updateIngredient(i, 'name', e.target.value)}
-              placeholder={isLast ? 'Agregar ingrediente...' : ''}
-              className={`border border-stone-200 rounded-lg px-3 py-2.5 text-sm text-stone-900 bg-white outline-none focus:border-stone-400 transition-colors ${isLast ? 'col-span-2' : ''}`}
-            />
-            {!isLast && (
-              <button
-                type="button"
-                onClick={() => removeIngredient(i)}
-                className="flex items-center justify-center text-stone-300 hover:text-red-400 transition-colors"
-              >
-                <X size={15} />
-              </button>
-            )}
-          </div>
+              <input
+                value={ing.qty}
+                onChange={e => updateIngredient(i, 'qty', e.target.value)}
+                placeholder="1, 2, 3..."
+                className="border border-stone-200 rounded-lg px-2 py-2.5 text-sm text-stone-900 bg-white outline-none focus:border-stone-400 transition-colors"
+              />
+              <SelectWrapper>
+                <select
+                  value={ing.unit}
+                  onChange={e => updateIngredient(i, 'unit', e.target.value)}
+                  className={selectSmallClass}
+                >
+                  {units.map(u => (
+                    <option key={u.id} value={u.value}>{u.label}</option>
+                  ))}
+                </select>
+              </SelectWrapper>
+              <input
+                value={ing.name}
+                onChange={e => updateIngredient(i, 'name', e.target.value)}
+                placeholder={isLast ? 'Agregar ingrediente...' : ''}
+                className={`border border-stone-200 rounded-lg px-3 py-2.5 text-sm text-stone-900 bg-white outline-none focus:border-stone-400 transition-colors ${isLast ? 'col-span-2' : ''}`}
+              />
+              {!isLast && (
+                <button
+                  type="button"
+                  onClick={() => removeIngredient(i)}
+                  className="flex items-center justify-center text-stone-300 hover:text-red-400 transition-colors"
+                >
+                  <X size={15} />
+                </button>
+              )}
+            </div>
           )
         })}
       </div>
 
-      {/* Condimentos */}
       <div className="flex flex-col gap-2">
-        <label className="text-xs uppercase tracking-wider text-stone-400">
-          Condimentos / a gusto
-        </label>
+        <label className="text-xs uppercase tracking-wider text-stone-400">Condimentos / a gusto</label>
         <CondimentsInput value={condiments} onChange={setCondiments} />
       </div>
 
-      {/* Preparación */}
+      {tags.length > 0 && (
+        <div className="flex flex-col gap-2">
+          <label className="text-xs uppercase tracking-wider text-stone-400">Etiquetas</label>
+          <TagSelector tags={tags} selected={selectedTags} onChange={setSelectedTags} />
+        </div>
+      )}
+
       <div className="flex flex-col gap-1.5">
         <label className="text-xs uppercase tracking-wider text-stone-400">Preparación</label>
         <textarea

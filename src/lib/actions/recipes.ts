@@ -9,11 +9,14 @@ export async function getRecipes() {
   const supabase = await createClient()
   const { data, error } = await supabase
     .from('recipes')
-    .select('id, title, category, time, is_favorite, ingredients, condiments')
+    .select('id, title, category, time, is_favorite, ingredients, condiments, recipe_tags(tag:tags(id, name, color))')
     .is('deleted_at', null)
     .order('created_at', { ascending: false })
   if (error) throw error
-  return data
+  return data.map(r => ({
+    ...r,
+    tags: (r.recipe_tags ?? []).map((rt: any) => rt.tag),
+  }))
 }
 
 export async function getRecipe(id: string) {
@@ -37,7 +40,7 @@ export async function getRecipeCount() {
   return count ?? 0
 }
 
-export async function createRecipe(recipe: RecipeInsert) {
+export async function createRecipe(recipe: RecipeInsert): Promise<string> {
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
 
@@ -63,7 +66,7 @@ export async function createRecipe(recipe: RecipeInsert) {
 
   if (error) throw error
   revalidatePath('/recetario')
-  redirect('/recetario')
+  return data.id
 }
 
 export async function updateRecipe(id: string, recipe: RecipeInsert) {
@@ -75,7 +78,6 @@ export async function updateRecipe(id: string, recipe: RecipeInsert) {
   if (error) throw error
   revalidatePath('/recetario')
   revalidatePath(`/recetas/${id}`)
-  redirect(`/recetas/${id}`)
 }
 
 export async function toggleFavorite(id: string, value: boolean) {

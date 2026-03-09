@@ -1,18 +1,20 @@
 import { getCategories, getUnits, getMethods, getTimeRanges } from '@/lib/actions/backoffice'
 import { getProfileWithLimits } from '@/lib/actions/profile'
+import { getTags } from '@/lib/actions/tags'
 import { createClient } from '@/lib/supabase/server'
 import NuevaRecetaClient from './NuevaRecetaClient'
 
 export default async function NuevaRecetaPage() {
   const supabase = await createClient()
 
-  const [categories, units, methods, timeRanges, profile, { count }] = await Promise.all([
+  const [categories, units, methods, timeRanges, profile, { count }, tags] = await Promise.all([
     getCategories(),
     getUnits(),
     getMethods(),
     getTimeRanges(),
     getProfileWithLimits(),
-    supabase.from('recipes').select('*', { count: 'exact', head: true }).is('deleted_at', null),
+    supabase.from('recipes').select('id', { count: 'exact', head: true }).is('deleted_at', null),
+    getTags(),
   ])
 
   const isPro = profile?.plan !== 'free'
@@ -28,6 +30,7 @@ export default async function NuevaRecetaPage() {
       isPro={isPro}
       limitReached={limitReached}
       maxIngredients={maxIngredients}
+      tags={tags}
     />
   )
 }

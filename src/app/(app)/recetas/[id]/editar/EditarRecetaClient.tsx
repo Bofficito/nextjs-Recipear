@@ -1,29 +1,44 @@
 'use client'
 import { useState } from 'react'
+import { useRouter } from 'next/navigation'
 import { updateRecipe } from '@/lib/actions/recipes'
+import { setRecipeTags } from '@/lib/actions/tags'
 import RecipeForm from '@/components/recipes/RecipeForm'
 import { useToast } from '@/components/ui/ToastProvider'
-import type { Recipe, RecipeInsert, Category, Unit, Method, TimeRange } from '@/lib/types'
+import type { Recipe, RecipeInsert, Category, Unit, Method, TimeRange, Tag } from '@/lib/types'
 import { ArrowLeft } from 'lucide-react'
 import Link from 'next/link'
 
 type Props = {
-  recipe:         Recipe
-  categories:     Category[]
-  units:          Unit[]
-  methods:        Method[]
-  timeRanges:     TimeRange[]
-  maxIngredients: number
+  recipe: Recipe
+  categories: Category[]
+  units: Unit[]
+  methods: Method[]
+  timeRanges: TimeRange[]
+  maxIngredients: number | null
+  tags: Tag[]
+  initialTags: string[]
 }
 
-export default function EditarRecetaClient({ recipe, categories, units, methods, timeRanges, maxIngredients }: Props) {
+export default function EditarRecetaClient({
+  recipe, categories, units, methods, timeRanges,
+  maxIngredients, tags, initialTags,
+}: Props) {
   const [pending, setPending] = useState(false)
-  const { showToast }         = useToast()
+  const { showToast } = useToast()
+  const router = useRouter()
 
-  async function handleSubmit(data: RecipeInsert) {
+  async function handleSubmit(data: RecipeInsert, tagIds: string[]) {
     setPending(true)
-    showToast('Cambios guardados ✓')
-    await updateRecipe(recipe.id, data)
+    try {
+      await updateRecipe(recipe.id, data)
+      await setRecipeTags(recipe.id, tagIds)
+      showToast('Cambios guardados ✓')
+      router.push(`/recetas/${recipe.id}`)
+    } catch {
+      setPending(false)
+      showToast('Ocurrió un error al guardar')
+    }
   }
 
   return (
@@ -47,6 +62,8 @@ export default function EditarRecetaClient({ recipe, categories, units, methods,
         methods={methods}
         timeRanges={timeRanges}
         maxIngredients={maxIngredients}
+        tags={tags}
+        initialTags={initialTags}
       />
     </div>
   )

@@ -1,4 +1,4 @@
-import { UtensilsCrossed, LogOut, Settings, Trash2, MessageSquare, Sparkles } from 'lucide-react'
+import { UtensilsCrossed, LogOut, Settings, Trash2, MessageSquare, Sparkles, Tag } from 'lucide-react'
 import Link from 'next/link'
 import { logout } from '@/lib/actions/auth'
 import { createClient } from '@/lib/supabase/server'
@@ -62,6 +62,12 @@ export default async function Header() {
               </span>
             )}
           </div>
+
+          <Tooltip label="Etiquetas">
+            <Link href="/etiquetas" className="text-stone-400 hover:text-stone-900 transition-colors">
+              <Tag size={16} />
+            </Link>
+          </Tooltip>
 
           <Tooltip label="Planes">
             <Link href="/planes" className="text-stone-400 hover:text-stone-900 transition-colors">
