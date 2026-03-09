@@ -2,6 +2,7 @@
 import { useState } from 'react'
 import { Link as LinkIcon, Loader } from 'lucide-react'
 import type { RecipeInsert, Category, Unit } from '@/lib/types'
+import Link from 'next/link'
 
 type Props = {
   categories: Category[]
@@ -45,15 +46,16 @@ export default function ImportFromUrl({ categories, units, isPro, onImport }: Pr
         <label className="text-xs uppercase tracking-wider text-stone-400">
           Importar desde URL
         </label>
-        <div className="border border-stone-200 rounded-xl px-4 py-4 flex items-center justify-between bg-stone-50">
+        <Link
+          href="/planes"
+          className="border border-stone-200 rounded-xl px-4 py-4 flex items-center justify-between bg-stone-50 hover:border-stone-300 transition-colors"
+        >
           <div className="flex flex-col gap-0.5">
-            <span className="text-sm text-stone-500">Importá recetas desde cualquier sitio web</span>
-            <span className="text-xs text-stone-400">Disponible en el plan de Cocina Pro</span>
+            <span className="text-sm text-stone-600">Importar recetas desde cualquier sitio web</span>
+            <span className="text-xs text-stone-400">Disponible desde el plan Pro — ver planes</span>
           </div>
-          <div className="flex items-center gap-1.5 text-xs text-stone-400 border border-stone-200 rounded-lg px-2.5 py-1.5 bg-white">
-            🔒 Pro
-          </div>
-        </div>
+          <span className="text-stone-300 text-lg">→</span>
+        </Link>
         <div className="flex items-center gap-3 my-1">
           <div className="flex-1 h-px bg-stone-100" />
           <span className="text-xs text-stone-300">o cargá manualmente</span>

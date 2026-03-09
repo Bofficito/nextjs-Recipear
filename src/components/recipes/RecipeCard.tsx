@@ -1,8 +1,8 @@
 import { Heart } from 'lucide-react'
-import type { Recipe } from '@/lib/types'
+import type { RecipeListItem } from '@/lib/types'
 import Link from 'next/link'
 
-export default function RecipeCard({ recipe }: { recipe: Recipe }) {
+export default function RecipeCard({ recipe }: { recipe: RecipeListItem }) {
   return (
     <Link
       href={`/recetas/${recipe.id}`}
@@ -31,12 +31,6 @@ export default function RecipeCard({ recipe }: { recipe: Recipe }) {
           </span>
         )}
       </div>
-
-      {recipe.notes && (
-        <p className="text-sm text-stone-400 italic mt-3 border-t border-stone-100 pt-3">
-          {recipe.notes}
-        </p>
-      )}
     </Link>
   )
 }

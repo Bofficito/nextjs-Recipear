@@ -16,7 +16,7 @@ export const metadata: Metadata = {
   metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL ?? 'https://recipear.vercel.app'),
   openGraph: {
     title:       'Recipear',
-    description: 'Tu recetario personal. Guardá, organizá y cocinás tus recetas desde cualquier dispositivo.',
+    description: 'Tu recetario personal. Guardá, organizá y cociná tus recetas desde cualquier dispositivo.',
     url:         '/',
     siteName:    'Recipear',
     locale:      'es_AR',

@@ -96,8 +96,9 @@ export default async function LandingPage() {
           </h1>
 
           <p className="text-lg text-stone-500 leading-relaxed mb-10 max-w-lg">
-            Guardá, organizá y cocinás tus recetas desde cualquier dispositivo.
-            Sin papel, sin perder nada.
+            Guardá, organizá y cociná tus recetas desde cualquier lado, 
+            <br />
+            sin perder nada.
           </p>
 
           <div className="flex items-center gap-4">

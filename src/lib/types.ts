@@ -24,6 +24,7 @@ export type Recipe = {
   created_at:  string
   updated_at:  string
   deleted_at:  string | null
+  condiments: string[]
 }
 
 export type RecipeInsert = Omit<Recipe, 'id' | 'user_id' | 'is_favorite' | 'created_at' | 'updated_at' | 'deleted_at'>
@@ -59,3 +60,7 @@ export const LUCIDE_ICONS: Record<string, LucideIcon> = {
   Sun, UtensilsCrossed, Coffee, Moon,
   Cake, Cookie, GlassWater, Pin,
 }
+
+export type RecipeListItem = Pick<Recipe,
+  'id' | 'title' | 'category' | 'time' | 'is_favorite' | 'ingredients' | 'condiments'
+>

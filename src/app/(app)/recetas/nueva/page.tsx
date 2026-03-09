@@ -15,9 +15,9 @@ export default async function NuevaRecetaPage() {
     supabase.from('recipes').select('*', { count: 'exact', head: true }).is('deleted_at', null),
   ])
 
-  const isPro          = profile?.plan !== 'free'
-  const limitReached   = profile?.max_recipes !== null && (count ?? 0) >= (profile?.max_recipes ?? 15)
-  const maxIngredients = profile?.max_ingredients ?? 10
+  const isPro = profile?.plan !== 'free'
+  const limitReached = profile?.max_recipes !== null && (count ?? 0) >= (profile?.max_recipes ?? 15)
+  const maxIngredients = profile?.max_ingredients ?? null
 
   return (
     <NuevaRecetaClient

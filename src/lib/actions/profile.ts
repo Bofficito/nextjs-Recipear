@@ -49,11 +49,11 @@ export async function getProfileWithLimits() {
     .single()
 
   return {
-    plan:           effectivePlan,
-    plan_type:      profile.plan_type,
+    plan: effectivePlan,
+    plan_type: profile.plan_type,
     plan_expires_at: profile.plan_expires_at,
-    max_recipes:    planLimits?.max_recipes    ?? 15,
-    max_ingredients: planLimits?.max_ingredients ?? 10,
+    max_recipes: planLimits == null ? 15 : planLimits.max_recipes,
+    max_ingredients: planLimits == null ? 10 : planLimits.max_ingredients,
   }
 }
 

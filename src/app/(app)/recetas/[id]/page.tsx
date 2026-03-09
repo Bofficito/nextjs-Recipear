@@ -21,15 +21,19 @@ export default async function RecipePage({
 
   return (
     <div className="flex flex-col gap-8">
-      <div className="flex items-center justify-between">
+      {/* Nav row */}
+      <div className="flex flex-col gap-3">
+        {/* Volver */}
         <Link
           href="/recetario"
-          className="flex items-center gap-1.5 text-sm text-stone-400 hover:text-stone-900 transition-colors"
+          className="flex items-center gap-1.5 text-sm text-stone-400 hover:text-stone-900 transition-colors w-fit"
         >
           <ArrowLeft size={15} />
           Volver
         </Link>
-        <div className="flex items-center gap-2">
+
+        {/* Acciones */}
+        <div className="flex items-center gap-2 flex-wrap">
           {recipe.steps && (
             <CookingModeButton
               title={recipe.title}
@@ -87,6 +91,24 @@ export default async function RecipePage({
 
       {ingredients.length > 0 && (
         <PortionScaler ingredients={ingredients} />
+      )}
+
+      {recipe.condiments && recipe.condiments.length > 0 && (
+        <section>
+          <h2 className="text-xs uppercase tracking-wider text-stone-400 mb-3">
+            Condimentos / a gusto
+          </h2>
+          <div className="flex flex-wrap gap-2">
+            {recipe.condiments.map((c: string, i: number) => (
+              <span
+                key={i}
+                className="text-xs bg-stone-100 text-stone-600 rounded-lg px-2.5 py-1.5"
+              >
+                {c}
+              </span>
+            ))}
+          </div>
+        </section>
       )}
 
       {recipe.steps && (

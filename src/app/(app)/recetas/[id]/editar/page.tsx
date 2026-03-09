@@ -28,7 +28,7 @@ export default async function EditarRecetaPage({
       units={units}
       methods={methods}
       timeRanges={timeRanges}
-      maxIngredients={profile?.max_ingredients ?? 10}
+      maxIngredients={profile?.max_ingredients ?? null}
     />
   )
 }

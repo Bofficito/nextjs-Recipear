@@ -1,10 +1,9 @@
 import { getRecipes } from '@/lib/actions/recipes'
 import { getCategories } from '@/lib/actions/backoffice'
-import { getProfile } from '@/lib/actions/profile'
+import { getProfileWithLimits } from '@/lib/actions/profile'
 import { Plus } from 'lucide-react'
 import RecipeList from '@/components/recipes/RecipeList'
 import Link from 'next/link'
-import { getProfileWithLimits } from '@/lib/actions/profile'
 
 export const metadata = { title: 'Mi recetario' }
 

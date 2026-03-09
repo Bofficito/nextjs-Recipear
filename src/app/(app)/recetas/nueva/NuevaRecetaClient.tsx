@@ -24,19 +24,21 @@ export default function NuevaRecetaClient({ categories, units, methods, timeRang
   const { showToast }         = useToast()
 
   async function handleSubmit(data: RecipeInsert) {
-    setPending(true)
-    try {
-      await createRecipe(data)
-      showToast('Receta guardada ✓')
-    } catch (e: any) {
-      setPending(false)
-      if (e?.message === 'LIMIT_REACHED') {
-        showToast('Llegaste al límite de recetas del plan gratuito')
-      } else {
-        showToast('Ocurrió un error al guardar')
-      }
+  setPending(true)
+  try {
+    await createRecipe(data)
+    showToast('Receta guardada ✓')
+  } catch (e: any) {
+    // Next.js lanza un error especial al hacer redirect() — no es un error real
+    if (e?.digest?.startsWith('NEXT_REDIRECT')) return
+    setPending(false)
+    if (e?.message === 'LIMIT_REACHED') {
+      showToast('Llegaste al límite de recetas del plan gratuito')
+    } else {
+      showToast('Ocurrió un error al guardar')
     }
   }
+}
 
   return (
     <div className="flex flex-col gap-8">
