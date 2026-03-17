@@ -17,8 +17,7 @@ export async function POST(req: NextRequest) {
   if (!ids?.length)
     return NextResponse.json({ error: "Sin recetas" }, { status: 400 });
 
-  const allRecipes = await getRecipesForExport();
-  const selected = allRecipes.filter((r) => ids.includes(r.id));
+  const selected = await getRecipesForExport(ids);
 
   const stream = await renderToStream(
     BookPDF({ recipes: selected, userName: user.email ?? "" }),

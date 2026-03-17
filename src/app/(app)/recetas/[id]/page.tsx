@@ -2,13 +2,11 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getRecipe } from "@/lib/actions/recipes";
 import { getRecipeTags } from "@/lib/actions/tags";
-import { Clock, ArrowLeft, Pencil, ChefHat } from "lucide-react";
+import { Clock, ArrowLeft, Pencil, ChefHat, ExternalLink } from "lucide-react";
 import PortionScaler from "./PortionScaler";
-import CookingModeButton from "./CookingModeButton";
 import FavoriteButton from "./FavoriteButton";
-import ShareButton from "./ShareButton";
 import DeleteButton from "./DeleteButton";
-import DownloadPDFButton from "./DownloadPDFButton";
+import ActionsMenu from "./ActionsMenu";
 
 import type { Ingredient, Tag } from "@/lib/types";
 
@@ -28,40 +26,35 @@ export default async function RecipePage({
 
   return (
     <div className="flex flex-col gap-8">
-      {/* Nav row */}
-      <div className="flex flex-col gap-3">
-        {/* Volver */}
+      {/* Nav row: volver + acciones compactas */}
+      <div className="flex items-center justify-between gap-4">
         <Link
           href="/recetario"
-          className="flex items-center gap-1.5 text-sm text-stone-400 hover:text-stone-900 transition-colors w-fit"
+          className="flex items-center gap-1.5 text-sm text-stone-400 hover:text-stone-900 transition-colors"
         >
           <ArrowLeft size={15} />
           Volver
         </Link>
 
-        {/* Acciones */}
-        <div className="flex items-center gap-2 flex-wrap">
-          {recipe.steps && (
-            <CookingModeButton
-              title={recipe.title}
-              steps={recipe.steps}
-              ingredients={ingredients}
-            />
-          )}
+        <div className="flex items-center gap-1.5">
           <Link
             href={`/recetas/${recipe.id}/editar`}
-            className="flex items-center gap-1.5 text-sm border border-stone-200 rounded-xl px-3 py-2 hover:border-stone-400 transition-colors"
+            title="Editar"
+            className="flex items-center justify-center w-9 h-9 border border-stone-200 rounded-xl hover:border-stone-400 transition-colors text-stone-500"
           >
-            <Pencil size={13} />
-            Editar
+            <Pencil size={15} />
           </Link>
           <FavoriteButton id={recipe.id} isFavorite={recipe.is_favorite} />
           <DeleteButton id={recipe.id} />
-          <ShareButton id={recipe.id} isPublic={recipe.is_public ?? false} />
-          <DownloadPDFButton id={recipe.id} />
+          <ActionsMenu
+            id={recipe.id}
+            title={recipe.title}
+            isPublic={recipe.is_public ?? false}
+          />
         </div>
       </div>
 
+      {/* Metadata + título */}
       <div>
         <div className="flex items-center gap-3 mb-3 flex-wrap">
           <span className="text-xs uppercase tracking-wider text-stone-400">
@@ -110,9 +103,31 @@ export default async function RecipePage({
             <p className="text-sm text-stone-500 italic">{recipe.notes}</p>
           </div>
         )}
+
+        {recipe.source_url && (
+          <a
+            href={recipe.source_url}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="mt-3 flex items-center gap-1.5 text-xs text-stone-400 hover:text-stone-600 transition-colors w-fit"
+          >
+            <ExternalLink size={12} />
+            Ver receta original
+          </a>
+        )}
       </div>
 
-      {ingredients.length > 0 && <PortionScaler ingredients={ingredients} />}
+      {/* Ingredientes + porciones + modo cocina */}
+      {ingredients.length > 0 && (
+        <PortionScaler
+          ingredients={ingredients}
+          cookingProps={
+            recipe.steps
+              ? { title: recipe.title, steps: recipe.steps }
+              : undefined
+          }
+        />
+      )}
 
       {recipe.condiments && recipe.condiments.length > 0 && (
         <section>

@@ -3,7 +3,6 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { createClient } from "../supabase/server";
 import type { RecipeInsert } from "../types";
-import { getProfileWithLimits } from "@/lib/actions/profile";
 
 export async function getRecipes() {
   const supabase = await createClient();
@@ -44,15 +43,19 @@ export async function getRecipeCount() {
   return count ?? 0;
 }
 
-export async function getRecipesForExport() {
+export async function getRecipesForExport(ids?: string[]) {
   const supabase = await createClient();
-  const { data, error } = await supabase
+  let query = supabase
     .from("recipes")
     .select(
       "id, title, category, method, time, notes, steps, ingredients, condiments, recipe_tags(tag:tags(id, name, color))",
     )
     .is("deleted_at", null)
     .order("created_at", { ascending: false });
+
+  if (ids?.length) query = query.in("id", ids);
+
+  const { data, error } = await query;
   if (error) throw error;
   return data.map((r) => ({
     ...r,
@@ -66,27 +69,15 @@ export async function createRecipe(recipe: RecipeInsert): Promise<string> {
     data: { user },
   } = await supabase.auth.getUser();
 
-  const [{ count }, profile] = await Promise.all([
-    supabase
-      .from("recipes")
-      .select("id", { count: "exact", head: true })
-      .eq("user_id", user!.id)
-      .is("deleted_at", null),
-    getProfileWithLimits(),
-  ]);
-
-  const maxRecipes = profile?.max_recipes ?? 15;
-  if (maxRecipes !== null && (count ?? 0) >= maxRecipes) {
-    throw new Error("LIMIT_REACHED");
-  }
-
   const { data, error } = await supabase
     .from("recipes")
     .insert({ ...recipe, user_id: user!.id })
     .select("id")
     .single();
 
+  if (error?.message?.includes("LIMIT_REACHED")) throw new Error("LIMIT_REACHED");
   if (error) throw error;
+
   revalidatePath("/recetario");
   return data.id;
 }
@@ -162,6 +153,7 @@ export async function getPublicRecipe(id: string) {
       "id, title, category, method, time, notes, steps, ingredients, condiments",
     )
     .eq("id", id)
+    .eq("is_public", true)
     .is("deleted_at", null)
     .single();
   return data;

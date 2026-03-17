@@ -2,13 +2,6 @@ import { Document, Page, Text, View, StyleSheet } from "@react-pdf/renderer";
 import type { Ingredient, Tag } from "@/lib/types";
 
 const s = StyleSheet.create({
-  page: {
-    paddingTop: 60,
-    paddingBottom: 60,
-    paddingHorizontal: 60,
-    backgroundColor: "#fafaf9",
-    fontFamily: "Helvetica",
-  },
   // — Portada —
   coverPage: {
     paddingTop: 60,
@@ -20,75 +13,154 @@ const s = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
   },
+  coverBorder: {
+    position: "absolute",
+    top: 24,
+    left: 24,
+    right: 24,
+    bottom: 24,
+    borderWidth: 1,
+    borderColor: "#44403c",
+  },
+  coverLabel: {
+    fontSize: 9,
+    color: "#78716c",
+    textTransform: "uppercase",
+    letterSpacing: 3,
+    marginBottom: 20,
+  },
+  coverDivider: {
+    width: 32,
+    height: 1,
+    backgroundColor: "#44403c",
+    marginBottom: 20,
+  },
   coverTitle: {
-    fontSize: 36,
+    fontSize: 38,
     color: "#fafaf9",
     fontFamily: "Helvetica-Bold",
     marginBottom: 12,
     textAlign: "center",
   },
-  coverSub: {
+  coverUser: {
     fontSize: 12,
     color: "#a8a29e",
     textAlign: "center",
-    marginBottom: 4,
+  },
+  coverFooter: {
+    position: "absolute",
+    bottom: 48,
+    left: 0,
+    right: 0,
+    flexDirection: "column",
+    alignItems: "center",
+    gap: 4,
   },
   coverCount: {
     fontSize: 10,
-    color: "#78716c",
+    color: "#57534e",
     textAlign: "center",
-    marginTop: 32,
+  },
+  coverDate: {
+    fontSize: 9,
+    color: "#44403c",
+    textAlign: "center",
+    letterSpacing: 1,
+  },
+  // — Páginas interiores —
+  page: {
+    paddingTop: 56,
+    paddingBottom: 52,
+    paddingHorizontal: 60,
+    backgroundColor: "#fafaf9",
+    fontFamily: "Helvetica",
   },
   // — Índice —
+  indexPageTitle: {
+    fontSize: 9,
+    color: "#a8a29e",
+    textTransform: "uppercase",
+    letterSpacing: 2,
+    marginBottom: 28,
+  },
+  categoryGroup: {
+    marginBottom: 20,
+  },
+  categoryHeader: {
+    fontSize: 8,
+    color: "#c4b5a5",
+    textTransform: "uppercase",
+    letterSpacing: 2,
+    marginBottom: 8,
+    paddingBottom: 4,
+    borderBottomWidth: 1,
+    borderBottomColor: "#f5f5f4",
+  },
   indexEntry: {
     flexDirection: "row",
     justifyContent: "space-between",
-    marginBottom: 8,
+    alignItems: "center",
+    marginBottom: 7,
+    paddingBottom: 7,
     borderBottomWidth: 1,
     borderBottomColor: "#f5f5f4",
-    paddingBottom: 8,
   },
   indexTitle: {
     fontSize: 11,
     color: "#1c1917",
+    flex: 1,
   },
   indexMeta: {
-    fontSize: 10,
-    color: "#a8a29e",
-  },
-  sectionTitle: {
     fontSize: 9,
     color: "#a8a29e",
-    textTransform: "uppercase",
-    letterSpacing: 1,
-    marginBottom: 10,
+    marginLeft: 8,
   },
-  pageTitle: {
-    fontSize: 24,
-    color: "#1c1917",
-    fontFamily: "Helvetica-Bold",
-    marginBottom: 8,
+  // — Receta —
+  recipeHeader: {
+    marginBottom: 20,
+    paddingBottom: 16,
+    borderBottomWidth: 1,
+    borderBottomColor: "#e7e5e4",
+  },
+  recipeTopRow: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "flex-start",
+    marginBottom: 10,
   },
   meta: {
     flexDirection: "row",
-    gap: 12,
-    marginBottom: 10,
+    gap: 10,
+    flex: 1,
   },
   metaText: {
-    fontSize: 9,
+    fontSize: 8,
     color: "#a8a29e",
     textTransform: "uppercase",
     letterSpacing: 1,
+  },
+  recipeCounter: {
+    fontSize: 9,
+    color: "#d6d3d1",
+    letterSpacing: 1,
+  },
+  pageTitle: {
+    fontSize: 26,
+    color: "#1c1917",
+    fontFamily: "Helvetica-Bold",
+    marginBottom: 8,
+    lineHeight: 1.2,
   },
   tags: {
     flexDirection: "row",
     flexWrap: "wrap",
     gap: 6,
-    marginBottom: 10,
+    marginTop: 8,
+    marginBottom: 4,
   },
   tag: {
-    fontSize: 9,
-    paddingHorizontal: 8,
+    fontSize: 8,
+    paddingHorizontal: 7,
     paddingVertical: 3,
     borderRadius: 4,
     color: "#78716c",
@@ -101,16 +173,17 @@ const s = StyleSheet.create({
     backgroundColor: "#f5f5f4",
     padding: 10,
     borderRadius: 4,
-    marginBottom: 16,
-  },
-  header: {
-    marginBottom: 24,
-    borderBottomWidth: 1,
-    borderBottomColor: "#e7e5e4",
-    paddingBottom: 16,
+    marginTop: 8,
   },
   section: {
     marginBottom: 20,
+  },
+  sectionTitle: {
+    fontSize: 8,
+    color: "#a8a29e",
+    textTransform: "uppercase",
+    letterSpacing: 2,
+    marginBottom: 10,
   },
   ingredient: {
     flexDirection: "row",
@@ -119,8 +192,8 @@ const s = StyleSheet.create({
     marginBottom: 5,
   },
   dot: {
-    width: 4,
-    height: 4,
+    width: 3,
+    height: 3,
     borderRadius: 2,
     backgroundColor: "#d6d3d1",
   },
@@ -134,8 +207,8 @@ const s = StyleSheet.create({
     gap: 6,
   },
   condimentPill: {
-    fontSize: 9,
-    paddingHorizontal: 8,
+    fontSize: 8,
+    paddingHorizontal: 7,
     paddingVertical: 3,
     borderRadius: 4,
     backgroundColor: "#f5f5f4",
@@ -144,19 +217,21 @@ const s = StyleSheet.create({
   steps: {
     fontSize: 11,
     color: "#44403c",
-    lineHeight: 1.7,
+    lineHeight: 1.75,
   },
   footer: {
     position: "absolute",
-    bottom: 30,
+    bottom: 28,
     left: 60,
     right: 60,
     flexDirection: "row",
     justifyContent: "space-between",
+    alignItems: "center",
   },
   footerText: {
     fontSize: 8,
     color: "#d6d3d1",
+    letterSpacing: 0.5,
   },
 });
 
@@ -178,61 +253,82 @@ type Props = {
   userName: string;
 };
 
+const MONTHS_ES = [
+  "enero", "febrero", "marzo", "abril", "mayo", "junio",
+  "julio", "agosto", "septiembre", "octubre", "noviembre", "diciembre",
+];
+
 export function BookPDF({ recipes, userName }: Props) {
+  const now = new Date();
+  const dateLabel = `${MONTHS_ES[now.getMonth()]} ${now.getFullYear()}`.toUpperCase();
+
+  // Group by category for index
+  const grouped: Record<string, Recipe[]> = {};
+  for (const r of recipes) {
+    const cat = r.category || "Sin categoría";
+    if (!grouped[cat]) grouped[cat] = [];
+    grouped[cat].push(r);
+  }
+
   return (
     <Document>
       {/* Portada */}
       <Page size="A4" style={s.coverPage}>
+        <View style={s.coverBorder} />
+        <Text style={s.coverLabel}>Recipear</Text>
+        <View style={s.coverDivider} />
         <Text style={s.coverTitle}>Mi Recetario</Text>
-        <Text style={s.coverSub}>{userName}</Text>
-        <Text style={s.coverCount}>
-          {recipes.length} receta{recipes.length !== 1 ? "s" : ""}
-        </Text>
+        <View style={s.coverFooter}>
+          <Text style={s.coverCount}>
+            {recipes.length} receta{recipes.length !== 1 ? "s" : ""}
+          </Text>
+          <Text style={s.coverDate}>{dateLabel}</Text>
+        </View>
       </Page>
 
-      {/* Índice */}
+      {/* Índice agrupado por categoría */}
       <Page size="A4" style={s.page}>
-        <Text style={{ ...s.sectionTitle, marginBottom: 20 }}>Índice</Text>
-        {recipes.map((r, i) => (
-          <View key={r.id} style={s.indexEntry}>
-            <Text style={s.indexTitle}>
-              {i + 1}. {r.title}
-            </Text>
-            <Text style={s.indexMeta}>
-              {r.category}
-              {r.time ? ` · ${r.time}` : ""}
-            </Text>
+        <Text style={s.indexPageTitle}>Índice</Text>
+        {Object.entries(grouped).map(([cat, items]) => (
+          <View key={cat} style={s.categoryGroup}>
+            <Text style={s.categoryHeader}>{cat}</Text>
+            {items.map((r) => (
+              <View key={r.id} style={s.indexEntry}>
+                <Text style={s.indexTitle}>{r.title}</Text>
+                <Text style={s.indexMeta}>
+                  {r.time ?? ""}
+                </Text>
+              </View>
+            ))}
           </View>
         ))}
         <View style={s.footer} fixed>
-          <Text style={s.footerText}>mis recetas</Text>
+          <Text style={s.footerText}>Recipear</Text>
         </View>
       </Page>
 
       {/* Una página por receta */}
       {recipes.map((recipe, index) => {
         const ingredients = recipe.ingredients as Ingredient[];
-        const metaParts = [recipe.category, recipe.method, recipe.time].filter(
-          Boolean,
-        );
+        const metaParts = [recipe.category, recipe.method, recipe.time].filter(Boolean);
+        const counter = `${String(index + 1).padStart(2, "0")} / ${String(recipes.length).padStart(2, "0")}`;
 
         return (
           <Page key={recipe.id} size="A4" style={s.page}>
-            <View style={s.header}>
-              <View style={s.meta}>
-                {metaParts.map((p, i) => (
-                  <Text key={i} style={s.metaText}>
-                    {p}
-                  </Text>
-                ))}
+            <View style={s.recipeHeader}>
+              <View style={s.recipeTopRow}>
+                <View style={s.meta}>
+                  {metaParts.map((p, i) => (
+                    <Text key={i} style={s.metaText}>{p}</Text>
+                  ))}
+                </View>
+                <Text style={s.recipeCounter}>{counter}</Text>
               </View>
               <Text style={s.pageTitle}>{recipe.title}</Text>
               {recipe.tags?.length > 0 && (
                 <View style={s.tags}>
                   {recipe.tags.map((tag) => (
-                    <Text key={tag.id} style={s.tag}>
-                      {tag.name}
-                    </Text>
+                    <Text key={tag.id} style={s.tag}>{tag.name}</Text>
                   ))}
                 </View>
               )}
@@ -258,9 +354,7 @@ export function BookPDF({ recipes, userName }: Props) {
                 <Text style={s.sectionTitle}>Condimentos / a gusto</Text>
                 <View style={s.condiments}>
                   {recipe.condiments.map((c, i) => (
-                    <Text key={i} style={s.condimentPill}>
-                      {c}
-                    </Text>
+                    <Text key={i} style={s.condimentPill}>{c}</Text>
                   ))}
                 </View>
               </View>
@@ -274,10 +368,8 @@ export function BookPDF({ recipes, userName }: Props) {
             )}
 
             <View style={s.footer} fixed>
-              <Text style={s.footerText}>mis recetas</Text>
-              <Text style={s.footerText}>
-                {index + 1} / {recipes.length}
-              </Text>
+              <Text style={s.footerText}>Recipear</Text>
+              <Text style={s.footerText}>{counter}</Text>
             </View>
           </Page>
         );

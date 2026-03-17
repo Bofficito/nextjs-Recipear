@@ -15,13 +15,16 @@ import {
 import { LUCIDE_ICONS } from "@/lib/types";
 import BackofficeSection from "./BackofficeSection";
 import { getFeedback } from "@/lib/actions/feedback";
+import { getUsers } from "@/lib/actions/admin";
+import UsersSection from "./UsersSection";
 
 export default async function BackofficePage() {
-  const [categories, units, methods, timeRanges] = await Promise.all([
+  const [categories, units, methods, timeRanges, users] = await Promise.all([
     getCategories(),
     getUnits(),
     getMethods(),
     getTimeRanges(),
+    getUsers(),
   ]);
   const feedbackList = await getFeedback();
 
@@ -124,6 +127,8 @@ export default async function BackofficePage() {
         ]}
         onCreate={createTimeRange}
       />
+      <UsersSection users={users} />
+
       <section className="flex flex-col gap-4">
         <h2 className="font-serif text-xl text-stone-900">Feedback</h2>
         {feedbackList.map((f: any) => (

@@ -2,24 +2,29 @@
 import { useState } from "react";
 import { Minus, Plus } from "lucide-react";
 import type { Ingredient } from "@/lib/types";
+import CookingModeButton from "./CookingModeButton";
 
 type Props = {
   ingredients: Ingredient[];
+  cookingProps?: { title: string; steps: string };
 };
 
 function scaleQty(qty: string, factor: number): string {
-  // intenta parsear la cantidad como número
   const n = parseFloat(qty.replace(",", "."));
-  if (isNaN(n)) return qty; // si no es número, lo deja igual (ej: "al gusto")
+  if (isNaN(n)) return qty;
   const result = n * factor;
-  // evita decimales innecesarios: 1.0 → "1", 1.5 → "1.5"
   return Number.isInteger(result)
     ? String(result)
     : result.toFixed(1).replace(/\.0$/, "");
 }
 
-export default function PortionScaler({ ingredients }: Props) {
+export default function PortionScaler({ ingredients, cookingProps }: Props) {
   const [portions, setPortions] = useState(1);
+
+  const scaledIngredients = ingredients.map((ing) => ({
+    ...ing,
+    qty: ing.qty ? scaleQty(ing.qty, portions) : ing.qty,
+  }));
 
   return (
     <section>
@@ -28,8 +33,14 @@ export default function PortionScaler({ ingredients }: Props) {
           Ingredientes
         </h2>
 
-        {/* Control de porciones */}
         <div className="flex items-center gap-3">
+          {cookingProps && (
+            <CookingModeButton
+              title={cookingProps.title}
+              steps={cookingProps.steps}
+              ingredients={scaledIngredients}
+            />
+          )}
           <span className="text-xs text-stone-400">porciones</span>
           <div className="flex items-center gap-2 border border-stone-200 rounded-xl px-2 py-1">
             <button
@@ -54,13 +65,11 @@ export default function PortionScaler({ ingredients }: Props) {
       </div>
 
       <ul className="divide-y divide-stone-100">
-        {ingredients.map((ing, i) => (
+        {scaledIngredients.map((ing, i) => (
           <li key={i} className="flex items-center gap-3 py-3">
             <span className="w-1.5 h-1.5 rounded-full bg-stone-300 flex-shrink-0" />
             <span className="text-stone-900">
-              {[ing.qty ? scaleQty(ing.qty, portions) : "", ing.unit, ing.name]
-                .filter(Boolean)
-                .join(" ")}
+              {[ing.qty, ing.unit, ing.name].filter(Boolean).join(" ")}
             </span>
           </li>
         ))}

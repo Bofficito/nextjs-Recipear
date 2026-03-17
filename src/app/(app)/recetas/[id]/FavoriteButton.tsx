@@ -23,14 +23,14 @@ export default function FavoriteButton({ id, isFavorite }: Props) {
   return (
     <button
       onClick={handleToggle}
-      className={`flex items-center gap-1.5 text-sm border rounded-xl px-3 py-2 transition-colors ${
+      title={active ? "Quitar de guardadas" : "Guardar"}
+      className={`flex items-center justify-center w-9 h-9 border rounded-xl transition-colors ${
         active
           ? "border-red-200 text-red-400 hover:border-red-300"
           : "border-stone-200 text-stone-400 hover:border-stone-400"
       }`}
     >
-      <Heart size={13} className={active ? "fill-red-400" : ""} />
-      {active ? "Guardada" : "Guardar"}
+      <Heart size={15} className={active ? "fill-red-400" : ""} />
     </button>
   );
 }

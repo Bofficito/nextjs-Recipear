@@ -43,6 +43,7 @@ export type Recipe = {
   deleted_at: string | null;
   condiments: string[];
   is_public: boolean;
+  source_url: string | null;
 };
 
 export type Category = {

@@ -3,12 +3,14 @@ import { useState } from "react";
 import { createPaymentPreference } from "@/lib/actions/payments";
 
 type Props = {
-  planId: "monthly" | "yearly" | "lifetime";
+  planId: "quarterly" | "biannual" | "lifetime";
   label: string;
   isDark: boolean;
+  compact?: boolean;
+  disabled?: boolean;
 };
 
-export default function PlanButton({ planId, label, isDark }: Props) {
+export default function PlanButton({ planId, label, isDark, compact, disabled }: Props) {
   const [loading, setLoading] = useState(false);
 
   async function handleClick() {
@@ -24,14 +26,18 @@ export default function PlanButton({ planId, label, isDark }: Props) {
   return (
     <button
       onClick={handleClick}
-      disabled={loading}
-      className={`w-full py-3 rounded-xl text-sm font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed ${
+      disabled={loading || disabled}
+      className={`font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed ${
+        compact
+          ? "text-xs rounded-lg px-3 py-1.5 border"
+          : "w-full py-3 rounded-xl text-sm"
+      } ${
         isDark
-          ? "bg-white text-stone-900 hover:bg-stone-100"
+          ? "bg-white text-stone-900 hover:bg-stone-100 border-stone-200"
           : "bg-stone-900 text-white hover:bg-stone-700"
       }`}
     >
-      {loading ? "Redirigiendo..." : label}
+      {loading ? "..." : label}
     </button>
   );
 }

@@ -2,7 +2,17 @@
 import { useState } from "react";
 import { FileDown } from "lucide-react";
 
-export default function DownloadPDFButton({ id }: { id: string }) {
+function slugify(str: string) {
+  return str
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .replace(/[^a-z0-9\s-]/g, "")
+    .trim()
+    .replace(/\s+/g, "-");
+}
+
+export default function DownloadPDFButton({ id, title }: { id: string; title: string }) {
   const [loading, setLoading] = useState(false);
 
   async function handleDownload() {
@@ -13,7 +23,7 @@ export default function DownloadPDFButton({ id }: { id: string }) {
       const url = URL.createObjectURL(blob);
       const a = document.createElement("a");
       a.href = url;
-      a.download = `receta.pdf`;
+      a.download = `${slugify(title)}.pdf`;
       a.click();
       URL.revokeObjectURL(url);
     } finally {

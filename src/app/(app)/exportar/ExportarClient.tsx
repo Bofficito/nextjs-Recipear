@@ -45,7 +45,10 @@ export default function ExportarClient({ recipes }: { recipes: Recipe[] }) {
       const url = URL.createObjectURL(blob);
       const a = document.createElement("a");
       a.href = url;
-      a.download = "mi-recetario.pdf";
+      const now = new Date();
+      const month = now.toLocaleString("es-AR", { month: "long" });
+      const year = now.getFullYear();
+      a.download = `recetario-${month}-${year}.pdf`;
       a.click();
       URL.revokeObjectURL(url);
     } finally {

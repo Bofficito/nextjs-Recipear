@@ -65,6 +65,7 @@ export default function RecipeForm({
   const [method, setMethod] = useState(initial?.method ?? "");
   const [timeRange, setTimeRange] = useState(initial?.time ?? "");
   const [notes, setNotes] = useState(initial?.notes ?? "");
+  const [sourceUrl, setSourceUrl] = useState(initial?.source_url ?? "");
   const [steps, setSteps] = useState(initial?.steps ?? "");
   const [condiments, setCondiments] = useState<string[]>(
     initial?.condiments ?? [],
@@ -117,6 +118,7 @@ export default function RecipeForm({
         steps: steps.trim() || null,
         ingredients: filtered,
         condiments,
+        source_url: sourceUrl.trim() || null,
       },
       selectedTags,
     );
@@ -321,6 +323,22 @@ export default function RecipeForm({
           />
         </div>
       )}
+
+      <div className="flex flex-col gap-1.5">
+        <label className="text-xs uppercase tracking-wider text-stone-400">
+          Fuente / referencia
+        </label>
+        <input
+          value={sourceUrl}
+          onChange={(e) => setSourceUrl(e.target.value)}
+          type="url"
+          placeholder="https://..."
+          className="border border-stone-200 rounded-xl px-4 py-3 text-stone-900 bg-white outline-none focus:border-stone-400 transition-colors"
+        />
+        <p className="text-xs text-stone-400">
+          Link al tutorial, video o receta original
+        </p>
+      </div>
 
       <div className="flex flex-col gap-1.5">
         <label className="text-xs uppercase tracking-wider text-stone-400">

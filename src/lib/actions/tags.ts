@@ -50,14 +50,18 @@ export async function getRecipeTags(recipeId: string): Promise<Tag[]> {
 
 export async function setRecipeTags(recipeId: string, tagIds: string[]) {
   const supabase = await createClient();
-  await supabase.from("recipe_tags").delete().eq("recipe_id", recipeId);
-  if (tagIds.length === 0) {
-    revalidatePath("/recetario");
-    return;
-  }
-  const { error } = await supabase
+  const { error: deleteError } = await supabase
     .from("recipe_tags")
-    .insert(tagIds.map((tag_id) => ({ recipe_id: recipeId, tag_id })));
-  if (error) throw error;
+    .delete()
+    .eq("recipe_id", recipeId);
+  if (deleteError) throw deleteError;
+
+  if (tagIds.length > 0) {
+    const { error } = await supabase
+      .from("recipe_tags")
+      .insert(tagIds.map((tag_id) => ({ recipe_id: recipeId, tag_id })));
+    if (error) throw error;
+  }
+
   revalidatePath("/recetario");
 }

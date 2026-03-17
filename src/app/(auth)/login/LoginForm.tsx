@@ -22,7 +22,7 @@ export default function LoginForm() {
           name="email"
           type="email"
           required
-          className="border border-stone-200 rounded-xl px-4 py-3 text-sm text-stone-900 bg-white outline-none focus:border-stone-400 transition-colors"
+          className="border border-stone-200 rounded-xl px-4 py-3 text-base text-stone-900 bg-white outline-none focus:border-stone-400 transition-colors"
           placeholder="tu@email.com"
         />
       </div>
@@ -35,7 +35,7 @@ export default function LoginForm() {
           name="password"
           type="password"
           required
-          className="border border-stone-200 rounded-xl px-4 py-3 text-sm text-stone-900 bg-white outline-none focus:border-stone-400 transition-colors"
+          className="border border-stone-200 rounded-xl px-4 py-3 text-base text-stone-900 bg-white outline-none focus:border-stone-400 transition-colors"
           placeholder="••••••••"
         />
       </div>

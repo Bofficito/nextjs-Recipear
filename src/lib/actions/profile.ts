@@ -24,7 +24,8 @@ export async function getProfileWithLimits() {
   } = await supabase.auth.getUser();
   if (!user) return null;
 
-  const [{ data: profile }, { data: limits }] = await Promise.all([
+  // Traer el perfil y todos los límites en paralelo (plan_limits es una tabla chica)
+  const [{ data: profile }, { data: allLimits }] = await Promise.all([
     supabase
       .from("profiles")
       .select("plan, plan_type, plan_expires_at")
@@ -32,9 +33,7 @@ export async function getProfileWithLimits() {
       .single(),
     supabase
       .from("plan_limits")
-      .select("max_recipes, max_ingredients, max_tags")
-      .eq("plan", "free")
-      .single(),
+      .select("plan, max_recipes, max_ingredients, max_tags"),
   ]);
 
   if (!profile) return null;
@@ -46,11 +45,12 @@ export async function getProfileWithLimits() {
 
   const effectivePlan = planExpired ? "free" : (profile.plan ?? "free");
 
-  const { data: planLimits } = await supabase
-    .from("plan_limits")
-    .select("max_recipes, max_ingredients, max_tags")
-    .eq("plan", effectivePlan)
-    .single();
+  // todos los planes pagos usan los mismos límites que "monthly" (todos son "pro")
+  const limitsKey =
+    effectivePlan === "free" || effectivePlan === "lifetime"
+      ? effectivePlan
+      : "monthly";
+  const planLimits = allLimits?.find((l) => l.plan === limitsKey);
 
   return {
     plan: effectivePlan,
@@ -63,6 +63,10 @@ export async function getProfileWithLimits() {
 }
 
 export async function isPro(): Promise<boolean> {
-  const profile = await getProfileWithLimits();
-  return profile?.plan !== "free";
+  const profile = await getProfile();
+  if (!profile) return false;
+  const planExpired = profile.plan_expires_at
+    ? new Date(profile.plan_expires_at) < new Date()
+    : false;
+  return !planExpired && profile.plan !== "free";
 }

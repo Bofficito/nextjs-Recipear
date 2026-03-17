@@ -26,6 +26,21 @@ function parseSteps(steps: string): string[] {
     .filter(Boolean);
 }
 
+function normalize(str: string) {
+  return str
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "");
+}
+
+function getStepIngredients(step: string, ingredients: Ingredient[]): Ingredient[] {
+  const stepNorm = normalize(step);
+  return ingredients.filter((ing) => {
+    const name = normalize(ing.name.trim());
+    return name.length >= 3 && stepNorm.includes(name);
+  });
+}
+
 function formatTime(seconds: number) {
   const m = Math.floor(seconds / 60)
     .toString()
@@ -202,6 +217,7 @@ export default function CookingMode({
   const [current, setCurrent] = useState(0);
   const isFirst = current === 0;
   const isLast = current === parsedSteps.length - 1;
+  const stepIngredients = getStepIngredients(parsedSteps[current], ingredients);
 
   useEffect(() => {
     let wakeLock: WakeLockSentinel | null = null;
@@ -266,7 +282,19 @@ export default function CookingMode({
         </div>
 
         {/* Texto — ocupa el espacio disponible */}
-        <div className="flex-1 flex items-center justify-center">
+        <div className="flex-1 flex flex-col items-center justify-center gap-6">
+          {stepIngredients.length > 0 && (
+            <div className="flex flex-wrap justify-center gap-2 max-w-xl">
+              {stepIngredients.map((ing, i) => (
+                <span
+                  key={i}
+                  className="text-xs text-stone-400 border border-stone-700 rounded-lg px-2.5 py-1"
+                >
+                  {[ing.qty, ing.unit, ing.name].filter(Boolean).join(" ")}
+                </span>
+              ))}
+            </div>
+          )}
           <p className="text-white text-2xl md:text-3xl font-serif leading-relaxed text-center max-w-2xl">
             {parsedSteps[current]}
           </p>
