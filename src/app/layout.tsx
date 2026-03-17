@@ -18,7 +18,7 @@ export const metadata: Metadata = {
   description:
     "Tu recetario personal. Guardá, organizá y cocinás tus recetas desde cualquier dispositivo.",
   metadataBase: new URL(
-    process.env.NEXT_PUBLIC_SITE_URL ?? "https://recipear.vercel.app",
+    process.env.NEXT_PUBLIC_SITE_URL ?? "https://recipear.com",
   ),
   openGraph: {
     title: "Recipear",
@@ -28,20 +28,11 @@ export const metadata: Metadata = {
     siteName: "Recipear",
     locale: "es_AR",
     type: "website",
-    images: [
-      {
-        url: "/og.png",
-        width: 1200,
-        height: 630,
-        alt: "Recipear",
-      },
-    ],
   },
   twitter: {
     card: "summary_large_image",
     title: "Recipear",
     description: "Tu recetario personal.",
-    images: ["/og.png"],
   },
 };
 
